@@ -1,0 +1,48 @@
+<h2 mat-dialog-title>Filter By</h2>
+<mat-dialog-content class="mat-typography">
+
+    <form class="example-form">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Start Date</mat-label>
+          <!-- <input matInput type="datetime-local" placeholder="" > -->
+          <input matInput [matDatepicker]="picker" placeholder="Choose a date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      
+        <!-- <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>End Date</mat-label>
+            <input matInput type="datetime-local" placeholder="" >
+        </mat-form-field> -->
+
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>End Date</mat-label>
+
+            <input matInput [matDatepicker]="picker2" placeholder="Choose a date">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+          
+
+        <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Months</mat-label>
+            <mat-select [formControl]="toppings" multiple>
+              <mat-select-trigger>
+                {{toppings.value ? toppings.value[0] : ''}}
+                <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
+                  (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+      </form>
+      
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close (click)="cancel()">Cancel</button>
+  <button mat-button (click)="onConfirmClick()" [mat-dialog-close]="true" cdkFocusInitial>Search</button>
+</mat-dialog-actions>
+
+

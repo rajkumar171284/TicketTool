@@ -1,0 +1,54 @@
+.example-container {
+  position: absolute;
+  top: 60px;
+  bottom: 60px;
+  left: 0;
+  right: 0;
+  background-color: #eef9f9;
+}
+
+.example-sidenav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  background: #24244e;
+}
+
+.example-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #d6d6ef;
+//   padding:20px ;
+  box-shadow: 0 1px 2px #000;
+}
+
+.example-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #00d0d0;  padding:10px ;
+}
+.logo{
+  background-color: #fff;
+  height: 60px !important;
+}
+.logo img{
+  max-height: 40px;
+}
+.logo mat-icon{
+  color:#444
+}
+.top-menu{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+.top-menu button,.example-header button{
+  color:#444;
+}
+
+

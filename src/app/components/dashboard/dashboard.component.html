@@ -1,0 +1,108 @@
+
+<div class="container-fluid">
+
+    <div class="floating">
+        <button mat-fab mat-button (click)="openDialog()">
+            <mat-icon>filter_list</mat-icon>
+
+        </button>
+
+    </div>
+    <div class="row">
+
+        <div class="col-md-12 dashboard-content">
+
+
+            <div class="row">
+
+                <div class="col-md-3">
+                    <mat-card class="result1">
+    
+                        <mat-card-subtitle>Yearly Rpt</mat-card-subtitle>
+                        <mat-card-content>
+                            <div class="abs-content abs1">
+                                <mat-icon>av_timer</mat-icon>
+
+                              </div>
+                                  43645647
+                        </mat-card-content>
+    
+                        <!-- <mat-card-footer>	more</mat-card-footer> -->
+                    </mat-card>
+                   
+                </div>
+    
+                <div class="col-md-3">
+                    <mat-card class="result1">
+    
+                        <mat-card-subtitle>Files Rpt</mat-card-subtitle>
+                        <mat-card-content> 
+                            <div class="abs-content abs2">
+                                <mat-icon>notifications_none</mat-icon>
+
+                              </div>
+                                  9878.00 <mat-icon style="color:green">arrow_upward</mat-icon>
+
+                        </mat-card-content>
+    
+                        <!-- <mat-card-footer>	more</mat-card-footer> -->
+                    </mat-card>
+                </div>
+    
+                <div class="col-md-3">
+                    <mat-card class="result1">
+    
+                        <mat-card-subtitle>Notifications</mat-card-subtitle>
+                        <mat-card-content>
+                            <div class="abs-content abs3">
+                                <mat-icon>library_books</mat-icon>
+
+                              </div>
+                                  979
+                        </mat-card-content>
+    
+                        <!-- <mat-card-footer>	more</mat-card-footer> -->
+                    </mat-card>
+                </div>
+                <div class="col-md-3">
+                    <mat-card class="result1">
+    
+                        <mat-card-subtitle>Pending</mat-card-subtitle>
+                        <mat-card-content>
+                            <div class="abs-content abs4">
+                                <mat-icon>list_alt</mat-icon>
+
+                              </div>
+                                  10<mat-icon style="color:red">arrow_downward</mat-icon>
+
+                        </mat-card-content>
+    
+                        <!-- <mat-card-footer>	more</mat-card-footer> -->
+                    </mat-card>
+                </div>
+    
+                
+               </div>
+
+
+
+
+           <div class="row mt-3">
+
+            <div class="col-md-6">
+                <app-chartjs [monthsData]="monthsData" chartType="chart1"></app-chartjs>
+               
+            </div>
+
+            <div class="col-md-6">
+                <app-chartjs [monthsData2]="monthsData2" chartType="chart2"></app-chartjs>
+
+            </div>
+
+
+            
+           </div>
+
+        </div>
+    </div>
+</div>
