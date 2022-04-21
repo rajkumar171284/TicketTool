@@ -7,7 +7,7 @@ const routes: Routes = [
 
 
   {
-    path:"",pathMatch:"full",redirectTo:'Dashboard'
+    path:"",pathMatch:"full",redirectTo:'dashboard'
   },
   {
     path:"dashboard",component:DashboardComponent

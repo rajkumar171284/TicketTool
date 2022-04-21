@@ -14,7 +14,9 @@ export interface filteredData {
   styleUrls: ['./filter-dialog.component.scss'],providers:[FormBuilder]
 })
 export class FilterDialogComponent implements OnInit {
-  toppings = new FormControl('',Validators.required);
+  myForm =this.fb.group({
+    toppings :['',Validators.required]
+  })
 
   toppingList: string[] = ['January',
   'February',
@@ -32,14 +34,15 @@ export class FilterDialogComponent implements OnInit {
   }
   cancel() {
     // closing itself and sending data to parent component
-    // this.dialogRef.close({ data: 'you cancelled' })
+    this.dialogRef.close({ data: this.toppingList })
   }
 
   onConfirmClick(): void {
-    console.log(this.toppings.valid)
-    if(this.toppings.valid){
-      console.log(this.toppings.value)
-      this.dialogRef.close({ data: this.toppings.value })
+    
+    
+    if(this.myForm.valid){
+      // console.log(this.myForm)
+      this.dialogRef.close({ data: this.myForm.controls['toppings'].value })
     }
     // return
     // else
