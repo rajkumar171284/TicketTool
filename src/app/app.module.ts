@@ -13,6 +13,7 @@ import {DashboardComponent} from './components/dashboard/dashboard.component';
 import {ChartjsComponent} from './components/chartjs/chartjs.component';
 import {FilterDialogComponent} from './components/filter-dialog/filter-dialog.component';
 import {ControlsComponent} from './components/controls/controls.component';
+import { TagCloudModule } from 'angular-tag-cloud-module';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,7 @@ import {ControlsComponent} from './components/controls/controls.component';
     FormsModule,
     HttpClientModule,
     MatNativeDateModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule,TagCloudModule
   ],
   providers: [],
   bootstrap: [AppComponent]
