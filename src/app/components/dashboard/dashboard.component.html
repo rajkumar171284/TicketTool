@@ -1,4 +1,3 @@
-
 <div class="container-fluid">
 
     <div class="floating">
@@ -17,100 +16,133 @@
 
                 <div class="col-md-3">
                     <mat-card class="result1">
-    
+
                         <mat-card-subtitle>Yearly Rpt</mat-card-subtitle>
                         <mat-card-content>
                             <div class="abs-content abs1">
                                 <mat-icon>av_timer</mat-icon>
 
-                              </div>
-                                  43645647<mat-icon style="color:#ddd">bookmark_border</mat-icon>
+                            </div>
+                            43645647<mat-icon style="color:#ddd">bookmark_border</mat-icon>
 
                         </mat-card-content>
-    
+
                         <!-- <mat-card-footer>	more</mat-card-footer> -->
                     </mat-card>
-                   
+
                 </div>
-    
+
                 <div class="col-md-3">
                     <mat-card class="result1">
-    
+
                         <mat-card-subtitle>Files Rpt</mat-card-subtitle>
-                        <mat-card-content> 
+                        <mat-card-content>
                             <div class="abs-content abs2">
                                 <mat-icon>notifications_none</mat-icon>
 
-                              </div>
-                                  9878.00 <mat-icon style="color:green">arrow_upward</mat-icon>
+                            </div>
+                            9878.00 <mat-icon style="color:green">arrow_upward</mat-icon>
 
                         </mat-card-content>
-    
+
                         <!-- <mat-card-footer>	more</mat-card-footer> -->
                     </mat-card>
                 </div>
-    
+
                 <div class="col-md-3">
                     <mat-card class="result1">
-    
+
                         <mat-card-subtitle>Notifications</mat-card-subtitle>
                         <mat-card-content>
                             <div class="abs-content abs3">
                                 <mat-icon>library_books</mat-icon>
 
-                              </div>
-                                  979<mat-icon style="color:#ddd">change_history</mat-icon>
+                            </div>
+                            979<mat-icon style="color:#ddd">change_history</mat-icon>
 
                         </mat-card-content>
-    
+
                         <!-- <mat-card-footer>	more</mat-card-footer> -->
                     </mat-card>
                 </div>
                 <div class="col-md-3">
                     <mat-card class="result1">
-    
+
                         <mat-card-subtitle>Pending</mat-card-subtitle>
                         <mat-card-content>
                             <div class="abs-content abs4">
                                 <mat-icon>list_alt</mat-icon>
 
-                              </div>
-                                  10<mat-icon style="color:red">arrow_downward</mat-icon>
+                            </div>
+                            10<mat-icon style="color:red">arrow_downward</mat-icon>
 
                         </mat-card-content>
-    
+
                         <!-- <mat-card-footer>	more</mat-card-footer> -->
                     </mat-card>
                 </div>
-    
-                
-               </div>
 
-
-
-
-           <div class="row mt-3">
-
-            <div class="col-md-6">
-                <app-chartjs [monthsData]="monthsData" chartType="chart1"></app-chartjs>
-               
-            </div>
-
-            <div class="col-md-6">
-                <app-chartjs [monthsData2]="monthsData2" chartType="chart2"></app-chartjs>
 
             </div>
 
 
-            
-           </div>
 
-           <div class="row">
-               <div class="col-md-4">
-                <angular-tag-cloud [data]="data" [width]="options.width" [height]="options.height" [overflow]="options.overflow">
-              </angular-tag-cloud>
-               </div>
-           </div>
+
+            <!-- <mat-card class="result1 mt-2 mb-2"> -->
+            <div class="row ">
+
+                <div class="col-md-6">
+                    <mat-card class="result2 mt-4 mb-3">
+
+                        <!-- <app-chartjs [monthsData]="monthsData" chartType="chart1"></app-chartjs> -->
+                        <app-plotly pMap="scatter"></app-plotly>
+                    </mat-card>
+                </div>
+
+                <div class="col-md-6 ">
+                    <mat-card class="result2 mt-4 mb-3">
+
+                        <app-plotly pMap="scatter2"></app-plotly>
+                        <!-- <app-chartjs [monthsData2]="monthsData2" chartType="chart2"></app-chartjs> -->
+                    </mat-card>
+                </div>
+            </div>
+
+            <!-- </mat-card> -->
+
+            <!-- -->
+
+            <div class="row">
+                <div class="col-md-12 " >
+                    <mat-card class=" mt-4 mb-3 wordCloud">
+
+                    <angular-tag-cloud [data]="data" [width]="options.width" [height]="options.height"
+                        [overflow]="options.overflow">
+                    </angular-tag-cloud>
+                    </mat-card>
+                </div>
+
+                <div class="col-md-12 ">
+                    <app-leaflet></app-leaflet>
+                    <!-- <app-chartjs [monthsData2]="monthsData2" chartType="chart2"></app-chartjs> -->
+
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-md-12">
+                    <mat-card class=" mt-4 mb-3 heatCnt">
+
+                    <app-plotly pMap="heat"></app-plotly>
+                    </mat-card>
+
+                </div>
+                <!-- <div class="col-md-4">
+                    <app-plotly pMap="heat"></app-plotly>
+
+                </div> -->
+            </div>
 
         </div>
     </div>

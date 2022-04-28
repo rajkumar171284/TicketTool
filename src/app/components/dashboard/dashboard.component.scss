@@ -2,8 +2,11 @@
     padding: 2em;
 }
 .result1{
-    background-color: #fff
-    ;
+    background-color: #fff;
+}
+.result2{
+    background: linear-gradient(45deg, #b0cbf8, #f1f6fd    );
+    box-shadow: 0 2px 4px #444;
 }
 .mat-card-content{
     position: relative;
@@ -53,4 +56,10 @@ mat-card-content{
     height: 30px;
     // width: 100%;
     top:110px;right: 2px;
+}
+.wordCloud{
+    background-color: #6387c3;
+}
+.heatCnt{
+    background-color: #e4edfc;
 }

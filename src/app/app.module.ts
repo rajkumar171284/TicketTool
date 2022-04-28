@@ -14,12 +14,24 @@ import {ChartjsComponent} from './components/chartjs/chartjs.component';
 import {FilterDialogComponent} from './components/filter-dialog/filter-dialog.component';
 import {ControlsComponent} from './components/controls/controls.component';
 import { TagCloudModule } from 'angular-tag-cloud-module';
+import { PlotlyComponent } from './plotly/plotly.component';
+
+import * as PlotlyJS from 'plotly.js-dist-min';
+import { PlotlyModule } from 'angular-plotly.js';
+PlotlyModule.plotlyjs = PlotlyJS;
+
+import { LeafletModule } from '@asymmetrik/ngx-leaflet/';
+
+import {LeafletComponent} from './leaflet/leaflet.component';
+import {ApiService} from './api.service';
+import { AdminComponent } from './admin/admin.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SidenavFixedComponent,DashboardComponent,ChartjsComponent,FilterDialogComponent,
-    ControlsComponent
+    ControlsComponent,
+    PlotlyComponent,LeafletComponent, AdminComponent,
   ],
   imports: [
     BrowserModule,
@@ -28,9 +40,10 @@ import { TagCloudModule } from 'angular-tag-cloud-module';
     FormsModule,
     HttpClientModule,
     MatNativeDateModule,
-    ReactiveFormsModule,TagCloudModule
+    ReactiveFormsModule,TagCloudModule,PlotlyModule,LeafletModule
+
   ],
-  providers: [],
+  providers: [ApiService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

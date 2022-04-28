@@ -4,6 +4,9 @@ import Chart from 'chart.js/auto';
 import {MatDialog} from '@angular/material/dialog';
 import {FilterDialogComponent} from '../../components/filter-dialog/filter-dialog.component';
 import { CloudData, CloudOptions } from 'angular-tag-cloud-module';
+
+import { ApiService } from '../../api.service';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -19,21 +22,21 @@ export class DashboardComponent implements OnInit{
   };
 
   data: CloudData[] = [
-    { text: 'Weight-8-fixed', weight: 1, position: { left: 20, top: 130 } },
-    { text: 'Weight-8-random', weight:2 },
-    { text: 'Weight-8-fixed', weight: 3, position: { left: 120, top: 30 } },
-    { text: 'Weight-8-random', weight: 5 },
-    { text: 'Weight-8-fixed', weight: 10, position: { left: 40, top: 60 } },
-    { text: 'Weight-8-random', weight: 8 },
-    { text: 'Weight-8-fixed', weight: 3, position: { left: 20, top: 30 } },
-    { text: 'Weight-8-random', weight: 6 },
-    { text: 'Weight-8-fixed', weight: 2, position: { left: 10, top: 100 } },
-    { text: 'Weight-8-random', weight: 4 },
+    { text: 'Web App', weight: 1, position: { left: 2, top: 50 } },
+    { text: 'Test Cases', weight:2 },
+    { text: 'Approval Pending', weight: 3, position: { left: 12, top: 60 } },
+    { text: 'Result Weight', weight: 5 },
+    { text: 'Big data',color:'red', weight: 6, position: { left: 2, top: 110 } },
+    { text: 'Mail Request', weight: 2 },
+    { text: 'Output:Success', weight: 3, position: { left: 514, top: 130 } },
+    { text: 'Analysis', weight: 1 },
+    { text: 'Random View',color:'white', weight: 2, position: { left: 6, top: 15 } },
+    // { text: 'Weight-8-random', weight: 4 },
 
     // ...
   ];
 
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog,private api: ApiService) {
    }
    monthsData:any=[
     'January',
@@ -54,6 +57,31 @@ export class DashboardComponent implements OnInit{
   ]
   
   ngOnInit(): void {
+
+    this.api.getSampleTicket().subscribe(data=>{
+      console.log(data)
+      const contentType = data.type;
+      // const blob = new Blob([data], { type: contentType });
+      
+
+    // const url = window.URL.createObjectURL(blob);
+    // window.open(url);
+
+    const blob = new Blob([data],{ type: contentType });
+    var fileReader = new FileReader();
+    fileReader.readAsText(blob);
+    fileReader.onload = () => {
+      console.log(fileReader.result?.toString());
+      const str =fileReader.result?.toString();
+      console.log(str);
+      // const jsonObj=(JSON.parse(str));
+      // console.log(jsonObj)
+      }
+      
+
+
+    })
+
   }
   openDialog() {
     const dialogRef = this.dialog.open(FilterDialogComponent);
@@ -66,5 +94,5 @@ export class DashboardComponent implements OnInit{
     });
   }
 
-
+ 
 }
