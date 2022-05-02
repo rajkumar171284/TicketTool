@@ -5,8 +5,8 @@ import { icon, latLng, marker, polyline, tileLayer } from 'leaflet';
 import { ApiService } from '../api.service';
 
 let micon = L.icon({
-  iconUrl: 'assets/pin.png',
-  iconSize: [20, 20]
+  iconUrl: 'assets/circle.png',
+  iconSize: [7, 7]
 });
 
 
@@ -23,11 +23,14 @@ export class LeafletComponent implements OnInit, AfterViewInit {
     this.map = L.map('map', {
       center: [39.8282, -98.5795],
       zoom: 1,
+      attributionControl: false
+
     });
     const tiles = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 18,
       minZoom: 1,
       attribution: '&copy; ',
+      
     });
 
     tiles.addTo(this.map);

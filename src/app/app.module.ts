@@ -25,13 +25,14 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet/';
 import {LeafletComponent} from './leaflet/leaflet.component';
 import {ApiService} from './api.service';
 import { AdminComponent } from './admin/admin.component';
+import { HeatmapPlotlyComponent } from './heatmap-plotly/heatmap-plotly.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SidenavFixedComponent,DashboardComponent,ChartjsComponent,FilterDialogComponent,
     ControlsComponent,
-    PlotlyComponent,LeafletComponent, AdminComponent,
+    PlotlyComponent,LeafletComponent, AdminComponent, HeatmapPlotlyComponent,
   ],
   imports: [
     BrowserModule,

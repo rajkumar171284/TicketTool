@@ -85,30 +85,26 @@
 
             </div>
 
-
-
-
-            <!-- <mat-card class="result1 mt-2 mb-2"> -->
             <div class="row ">
 
-                <div class="col-md-6">
+                <div class="col-md-12">
                     <mat-card class="result2 mt-4 mb-3">
 
                         <!-- <app-chartjs [monthsData]="monthsData" chartType="chart1"></app-chartjs> -->
-                        <app-plotly pMap="scatter"></app-plotly>
-                    </mat-card>
-                </div>
-
-                <div class="col-md-6 ">
-                    <mat-card class="result2 mt-4 mb-3">
-
                         <app-plotly pMap="scatter2"></app-plotly>
-                        <!-- <app-chartjs [monthsData2]="monthsData2" chartType="chart2"></app-chartjs> -->
+
+
                     </mat-card>
                 </div>
+
+                <!-- <div class="col-md-6 ">
+                    <mat-card class="result3 mt-4 mb-3">
+                        <app-plotly pMap="line"></app-plotly>
+                        
+                    </mat-card>
+                </div> -->
             </div>
 
-            <!-- </mat-card> -->
 
             <!-- -->
 
@@ -123,7 +119,7 @@
                 </div>
 
                 <div class="col-md-12 ">
-                    <app-leaflet></app-leaflet>
+                    <!-- <app-heatmap-plotly pMap="scatter2"></app-heatmap-plotly> -->
                     <!-- <app-chartjs [monthsData2]="monthsData2" chartType="chart2"></app-chartjs> -->
 
                 </div>
@@ -133,8 +129,8 @@
             <div class="row">
                 <div class="col-md-12">
                     <mat-card class=" mt-4 mb-3 heatCnt">
-
-                    <app-plotly pMap="heat"></app-plotly>
+                        <app-heatmap-plotly pMap="scatter2"></app-heatmap-plotly>
+                    <!-- <app-plotly pMap="heat"></app-plotly> -->
                     </mat-card>
 
                 </div>

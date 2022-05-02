@@ -58,29 +58,29 @@ export class DashboardComponent implements OnInit{
   
   ngOnInit(): void {
 
-    this.api.getSampleTicket().subscribe(data=>{
-      console.log(data)
-      const contentType = data.type;
-      // const blob = new Blob([data], { type: contentType });
+    // this.api.getSampleTicket().subscribe(data=>{
+    //   console.log(data)
+    //   const contentType = data.type;
+    //   // const blob = new Blob([data], { type: contentType });
       
 
-    // const url = window.URL.createObjectURL(blob);
-    // window.open(url);
+    // // const url = window.URL.createObjectURL(blob);
+    // // window.open(url);
 
-    const blob = new Blob([data],{ type: contentType });
-    var fileReader = new FileReader();
-    fileReader.readAsText(blob);
-    fileReader.onload = () => {
-      console.log(fileReader.result?.toString());
-      const str =fileReader.result?.toString();
-      console.log(str);
-      // const jsonObj=(JSON.parse(str));
-      // console.log(jsonObj)
-      }
+    // const blob = new Blob([data],{ type: contentType });
+    // var fileReader = new FileReader();
+    // fileReader.readAsText(blob);
+    // fileReader.onload = () => {
+    //   console.log(fileReader.result?.toString());
+    //   const str =fileReader.result?.toString();
+    //   console.log(str);
+    //   // const jsonObj=(JSON.parse(str));
+    //   // console.log(jsonObj)
+    //   }
       
 
 
-    })
+    // })
 
   }
   openDialog() {
