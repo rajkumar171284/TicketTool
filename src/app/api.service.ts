@@ -17,14 +17,14 @@ export class ApiService {
 
   getSampleTicket(): Observable<any> {
     const httpOptions = {
-      
-      // headers: new HttpHeaders(),
+      // 'Accept':'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+      headers: new HttpHeaders(),
       // responseType: 'text'
-      responseType: 'arraybuffer'
+      responseType: 'ResponseContentType.Blob'
       // observe: 'response',
       // responseType : 'application/octet-stream'
     };
-    return this.http.get('assets/Ticketdump2_sample.xlsx',{headers: new HttpHeaders(),responseType: 'blob'}).pipe(map((response: any) => {
+    return this.http.get('assets/Ticketdump2_sample.xlsx',{responseType: 'arraybuffer'}).pipe(map((response: any) => {
       return response;
     }));
   }
