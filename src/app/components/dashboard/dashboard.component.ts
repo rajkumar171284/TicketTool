@@ -66,33 +66,33 @@ export class DashboardComponent implements OnInit ,OnDestroy{
     // this.getJSON()
 
     // apiData.subscribe(res => console.log(res.status, res.response));
-    this.subscription= this.api.getSampleTicket().subscribe(oReq => {
+    // this.subscription= this.api.getSampleTicket().subscribe(oReq => {
 
-      var arraybuffer = oReq;
-      console.log(arraybuffer)
+    //   var arraybuffer = oReq;
+    //   console.log(arraybuffer)
 
-      /* convert data to binary string */
-      var data = new Uint8Array(arraybuffer);
-      var arr = new Array();
-      for (var i = 0; i != data.length; ++i) {
-        arr[i] = String.fromCharCode(data[i]);
-        // console.log("Data" + data[i]);
-      }
-      var bstr = arr.join("");
-      var workbook = XLSX.read(bstr, { type: "binary" });
-      //console.log("Data"+bstr);
-      var first_sheet_name = workbook.SheetNames[0];
-      /* Get worksheet */
-      var worksheet = workbook.Sheets[first_sheet_name];
-      var json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { header: 1, raw: true });
-      var jsonOut = JSON.stringify(json);
-      console.log("test" + jsonOut.length);
-      for(let a of jsonOut){
-        console.log("a" + a);
-      }
+    //   /* convert data to binary string */
+    //   var data = new Uint8Array(arraybuffer);
+    //   var arr = new Array();
+    //   for (var i = 0; i != data.length; ++i) {
+    //     arr[i] = String.fromCharCode(data[i]);
+    //     // console.log("Data" + data[i]);
+    //   }
+    //   var bstr = arr.join("");
+    //   var workbook = XLSX.read(bstr, { type: "binary" });
+    //   //console.log("Data"+bstr);
+    //   var first_sheet_name = workbook.SheetNames[0];
+    //   /* Get worksheet */
+    //   var worksheet = workbook.Sheets[first_sheet_name];
+    //   var json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { header: 1, raw: true });
+    //   var jsonOut = JSON.stringify(json);
+    //   console.log("test" + jsonOut.length);
+    //   for(let a of jsonOut){
+    //     console.log("a" + a);
+    //   }
 
 
-    })
+    // })
 
     // this.api.getSampleTicket().subscribe(data => {
     //   console.log(data)
@@ -159,7 +159,7 @@ export class DashboardComponent implements OnInit ,OnDestroy{
       var arr = new Array();
       for (var i = 0; i != data.length; ++i) {
         arr[i] = String.fromCharCode(data[i]);
-        console.log("Data" + data[i]);
+        // console.log("Data" + data[i]);
       }
       var bstr = arr.join("");
       var workbook = XLSX.read(bstr, { type: "binary" });
@@ -169,7 +169,7 @@ export class DashboardComponent implements OnInit ,OnDestroy{
       var worksheet = workbook.Sheets[first_sheet_name];
       var json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { header: 1, raw: true });
       var jsonOut = JSON.stringify(json);
-      console.log("test" + jsonOut);
+      // console.log("test" + jsonOut);
 
     }
   }

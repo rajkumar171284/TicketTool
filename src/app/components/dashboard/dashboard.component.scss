@@ -23,6 +23,10 @@
     top: -70px;
     display: flex;
     justify-content: center;    align-items: center;
+    box-shadow: 0 1px 2px #000;
+}
+.abs1,.abs2,.abs3,.abs4{
+    background-color:#b0cbf8 !important;
 }
 .abs1{
     background-color: orange;
@@ -43,12 +47,20 @@
 .abs-content mat-icon{
 color:#fff;
 }
+.result1 mat-card-subtitle{
+    color:#24244e;
+}
 mat-card-content,mat-card-subtitle{
-    color:#5970c3;text-align: right;
+    text-align: right;
     text-transform: uppercase;
 }
 mat-card-content{
-    font-size: 1.4em;
+    font-size: 2em;
+    color:#444;font-weight:300;
+    
+}
+.result1 mat-card-content mat-icon{
+    text-shadow: 0 1px 2px #000;
 }
 .container-fluid{
     position: relative;
