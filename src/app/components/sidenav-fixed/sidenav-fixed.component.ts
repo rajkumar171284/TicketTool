@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Input } from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 
 @Component({
@@ -7,6 +7,7 @@ import {FormBuilder, FormGroup} from '@angular/forms';
   styleUrls: ['./sidenav-fixed.component.scss']
 })
 export class SidenavFixedComponent implements OnInit {
+  @Input('isSession') isSession:any;
   options: FormGroup;
 
   constructor(fb: FormBuilder) {

@@ -1,4 +1,4 @@
-<ng-container *ngIf="shouldRun">
+<ng-container >
     <mat-toolbar class="example-header">
         <button mat-button (click)="sidenav.toggle()">
           <mat-icon>menu</mat-icon>
@@ -82,5 +82,5 @@
     <mat-toolbar class="example-footer">Footer</mat-toolbar>
   </ng-container>
   
-  <div *ngIf="!shouldRun">Please open on StackBlitz to see result</div>
-  <router-outlet></router-outlet>
+  
+  <!-- <router-outlet></router-outlet> -->
