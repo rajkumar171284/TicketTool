@@ -6,7 +6,7 @@
         </button>
         <div class="top-menu">
 
-        <button mat-button>
+        <button (click)="logOut()" mat-button>
           Hi,User <mat-icon>account_box</mat-icon>
 
         </button>
@@ -28,16 +28,16 @@
             </button>
             
           </mat-list-item>
-          <mat-nav-list style="    padding-left: 10px;    padding-right: 10px;">
-            <a mat-list-item routerLink="/dashboard" routerLinkActive="active-list-item">
+          <mat-nav-list style="padding-left: 10px;    padding-right: 10px;">
+            <a mat-list-item routerLink="/home/dashboard" routerLinkActive="active-list-item">
               <!-- <mat-icon>equalizer</mat-icon> -->
               Dashboard
             </a>
-            <a mat-list-item routerLink="/admin" routerLinkActive="active-list-item">
-              <!-- <mat-icon>flag</mat-icon> -->
+            <a mat-list-item >
+              
               Control Panel 
             </a>
-            <!-- <a mat-list-item routerLink="/about" routerLinkActive="active-list-item">About</a> -->
+            <a mat-list-item>Reports</a>
           </mat-nav-list>
 
           
@@ -83,4 +83,3 @@
   </ng-container>
   
   
-  <!-- <router-outlet></router-outlet> -->

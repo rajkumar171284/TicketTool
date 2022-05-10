@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/cor
 import * as Plotly from 'plotly.js-dist-min';
 import { Config, Data, Layout } from 'plotly.js';
 
-import {Mainclass} from '../mainclass';
+import {Mainclass} from '../../mainclass';
 @Component({
   selector: 'app-heatmap-plotly',
   templateUrl: './heatmap-plotly.component.html',

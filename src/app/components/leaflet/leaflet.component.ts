@@ -2,7 +2,7 @@ import { Component, OnInit, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
 
 import { icon, latLng, marker, polyline, tileLayer } from 'leaflet';
-import { ApiService } from '../api.service';
+import { ApiService } from '../../api.service';
 
 let micon = L.icon({
   iconUrl: 'assets/circle.png',
