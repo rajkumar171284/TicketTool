@@ -1,4 +1,4 @@
-import { AfterViewInit, ElementRef, Component, OnInit, ViewChild, SimpleChanges,OnDestroy } from '@angular/core';
+import { AfterViewInit, ElementRef, Component, OnInit, ViewChild, SimpleChanges, OnDestroy } from '@angular/core';
 // import { Chart } from 'chart.js';
 import Chart from 'chart.js/auto';
 import { MatDialog } from '@angular/material/dialog';
@@ -8,7 +8,7 @@ import { CloudData, CloudOptions } from 'angular-tag-cloud-module';
 import { ApiService } from '../../api.service';
 import { ajax } from 'rxjs/ajax';
 const apiData = ajax('/assets/Ticketdump2_sample.xlsx');
-import { WorkBook, read, utils, write, readFile, } from 'xlsx';
+// import { WorkBook, read, utils, write, readFile, } from 'xlsx';
 import * as XLSX from 'xlsx';
 import { Subscription } from 'rxjs';
 @Component({
@@ -16,8 +16,9 @@ import { Subscription } from 'rxjs';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit ,OnDestroy{
-  private subscription: Subscription | undefined;  
+export class DashboardComponent implements OnInit, OnDestroy {
+  private subscription: Subscription | undefined;
+
 
 
   options: CloudOptions = {
@@ -63,6 +64,7 @@ export class DashboardComponent implements OnInit ,OnDestroy{
     'June',
   ]
   ngOnInit(): void {
+    this.getData()
     // this.getJSON()
 
     // apiData.subscribe(res => console.log(res.status, res.response));
@@ -173,7 +175,29 @@ export class DashboardComponent implements OnInit ,OnDestroy{
 
     }
   }
-  ngOnDestroy(){
+  ngOnDestroy() {
     this.subscription?.unsubscribe()
   }
+  arr: any = [];
+  async getData() {
+ let url ='/../assets/test-data2.xlsx';
+ const data = await (await fetch(url)).arrayBuffer();
+ /* data is an ArrayBuffer */
+ const workbook = XLSX.read(data);
+ const firstSheetName = workbook.SheetNames[0];
+  const worksheet = workbook.Sheets[firstSheetName];
+  const sheetValues = XLSX.utils.sheet_to_json(worksheet);
+
+  const groupByCategory = sheetValues.reduce((group, product) => {
+    console.log(product)
+    this.arr.push(product)
+
+
+  })
+   
+  }
+}
+
+function n(n: any) {
+  throw new Error('Function not implemented.');
 }

@@ -24,9 +24,13 @@ export class ApiService {
       // observe: 'response',
       // responseType : 'application/octet-stream'
     };
-    return this.http.get('assets/Ticketdump2_sample.xlsx',{responseType: 'arraybuffer'}).pipe(map((response: any) => {
+    return this.http.get('assets/test-data2.xlsx',{responseType: 'text'}).pipe(map((response: any) => {
       return response;
     }));
+  }
+
+  getCSV(){
+    return this.http.get('assets/test-data2.xlsx',{responseType: 'arraybuffer' as 'json',headers: {'Content-Type': 'application/json'}}).pipe(map((response: any) => response));
   }
 
 
