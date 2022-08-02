@@ -139,10 +139,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   }
   openDialog() {
-    const dialogRef = this.dialog.open(FilterDialogComponent);
+    const item={
+      totalCategory:this.totalCategory,totalLoc:this.totalLoc
+    }
+    const dialogRef = this.dialog.open(FilterDialogComponent,{
+      backdropClass: 'backdropBackground', // This is the "wanted" line
+      data:item
+    });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result)
+      // console.log(result)
       this.monthsData = result.data;
       this.monthsData2 = result.data;
       console.log(`Dialog result: ${result}`);
@@ -188,6 +194,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   totalResolvedData: any = [];
   loader = true;
   totalCategory: any = [];
+  totalLoc: any = [];
+
   newLabel:any;
   async getData() {
     let url = '/../assets/test-data2.xlsx';
@@ -221,12 +229,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
         return item["Resolved Status"] == "Resolved";
       })
+      const loc = z.map(item => {
+        return item["Location"];
+      })
+      this.totalLoc = [...new Set(loc)].map(z => z);
+
 
       const uniq = z.map(item => {
 
         return item["Problem Category"];
       })
-      console.log('uniq', uniq)
+      // console.log('uniq', uniq)
       const totalCategory = [...new Set(uniq)].map(z => z);
       this.totalCategory=[];
       for(let a of totalCategory){
@@ -243,7 +256,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
         this.totalCategory.push(item)
       }
-      this.newLabel='Problem Category'
+      this.newLabel='Problem Category vs Total Count'
       
 
 

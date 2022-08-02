@@ -45,7 +45,7 @@ export class PlotlyComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     // console.log(changes)
-    console.log(this.totalCategory)
+    // console.log(this.totalCategory)
     if (this.pMap === 'scatter2') {
 
       this.data = [
@@ -59,9 +59,24 @@ export class PlotlyComponent implements OnInit, OnChanges {
         width: 520, height: 340, title: 'Bar chart',
         plot_bgcolor: "rgba(0,0,0,0)",
         paper_bgcolor: "rgba(0,0,0,0)",
+        margin: {
+          l: 50,
+          r: 50,
+          b: 100,
+          t: 50,
+          pad: 4
+        },
+      
       }
       this.graph1.data = this.data;
       this.graph1.layout.title=this.newLabel;
+      this.graph1.layout.margin= {
+        l: 50,
+        r: 50,
+        b: 250,
+        t: 50,
+        pad: 4
+      }
 
     } else
       if (this.pMap === 'line') {

@@ -26,10 +26,11 @@ export class FilterDialogComponent implements OnInit {
   'June','July','Aug','Sep','Oct','Nov','Dec'];
 
   constructor(public dialogRef: MatDialogRef<FilterDialogComponent>,//@Optional() is used to prevent error if no data is passed
-  @Optional() @Inject(MAT_DIALOG_DATA) public data: filteredData,private fb:FormBuilder
+  @Optional() @Inject(MAT_DIALOG_DATA) public data: any,private fb:FormBuilder
     ) { }
 
   ngOnInit(): void {
+    console.log(this.data)
 
   }
   cancel() {

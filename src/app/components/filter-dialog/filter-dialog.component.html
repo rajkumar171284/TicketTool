@@ -1,5 +1,5 @@
 <h2 mat-dialog-title>Filter By</h2>
-<mat-dialog-content class="mat-typography">
+<mat-dialog-content color="light" class="mat-typography">
 
     <form [formGroup]="myForm" class="example-form">
         <mat-form-field class="example-full-width" appearance="fill">
@@ -25,15 +25,22 @@
           
 
         <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>Months</mat-label>
+            <mat-label>Category</mat-label>
             <mat-select formControlName="toppings" multiple>
               <mat-select-trigger>
-                <!-- {{toppings.value ? toppings.value[0] : ''}}
-                <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
-                  (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? 'other' : 'others'}})
-                </span> -->
+              
               </mat-select-trigger>
-              <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+              <mat-option *ngFor="let item of data.totalCategory" [value]="item.key">{{item.key}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field class="example-full-width" appearance="fill">
+            <mat-label>Location</mat-label>
+            <mat-select formControlName="toppings" multiple>
+              <mat-select-trigger>
+              
+              </mat-select-trigger>
+              <mat-option *ngFor="let item of data.totalLoc" [value]="item">{{item}}</mat-option>
             </mat-select>
           </mat-form-field>
           
