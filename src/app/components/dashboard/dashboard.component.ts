@@ -7,10 +7,13 @@ import { CloudData, CloudOptions } from 'angular-tag-cloud-module';
 
 import { ApiService } from '../../api.service';
 import { ajax } from 'rxjs/ajax';
+// import{of} from'rxjs/o';
 const apiData = ajax('/assets/Ticketdump2_sample.xlsx');
 // import { WorkBook, read, utils, write, readFile, } from 'xlsx';
 import * as XLSX from 'xlsx';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable, of, concatMap } from 'rxjs';
+import { delay } from "rxjs/operators";
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -18,7 +21,7 @@ import { Subscription } from 'rxjs';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   private subscription: Subscription | undefined;
-
+  dataObserver$!: Observable<any[]>;
 
 
   options: CloudOptions = {
@@ -179,22 +182,75 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.subscription?.unsubscribe()
   }
   arr: any = [];
+  totalData: any = [];
+  totalClosedData: any = [];
+  totalunClosedData: any = [];
+  totalResolvedData: any = [];
+  loader = true;
+  totalCategory: any = [];
+  newLabel:any;
   async getData() {
- let url ='/../assets/test-data2.xlsx';
- const data = await (await fetch(url)).arrayBuffer();
- /* data is an ArrayBuffer */
- const workbook = XLSX.read(data);
- const firstSheetName = workbook.SheetNames[0];
-  const worksheet = workbook.Sheets[firstSheetName];
-  const sheetValues = XLSX.utils.sheet_to_json(worksheet);
+    let url = '/../assets/test-data2.xlsx';
+    const data = await (await fetch(url)).arrayBuffer();
+    /* data is an ArrayBuffer */
+    const workbook = XLSX.read(data);
+    const firstSheetName = workbook.SheetNames[0];
+    const worksheet = workbook.Sheets[firstSheetName];
+    const sheetValues = XLSX.utils.sheet_to_json(worksheet);
 
-  const groupByCategory = sheetValues.reduce((group, product) => {
-    console.log(product)
-    this.arr.push(product)
+    const groupByCategory = sheetValues.reduce((group, product) => {
+      // console.log(product)
+      this.arr.push(product)
 
 
-  })
-   
+    })
+    this.dataObserver$ = of(this.arr).pipe(concatMap(item => of(item).pipe(delay(1000))));
+    this.dataObserver$.subscribe(z => {
+      console.log(z)
+      this.totalData = z;
+      if (z) {
+        this.loader = false;
+      }
+      this.totalClosedData = z.filter(item => {
+        return item.Status == "CLOSED";
+      })
+      this.totalunClosedData = z.filter(item => {
+        return item.Status != "CLOSED";
+      })
+      this.totalResolvedData = z.filter(item => {
+
+        return item["Resolved Status"] == "Resolved";
+      })
+
+      const uniq = z.map(item => {
+
+        return item["Problem Category"];
+      })
+      console.log('uniq', uniq)
+      const totalCategory = [...new Set(uniq)].map(z => z);
+      this.totalCategory=[];
+      for(let a of totalCategory){
+        let item:any={};
+        item.key=a;
+        item.count=0;
+
+        const newArr = this.totalData.filter((obj:any)=>{
+        return obj["Problem Category"]==a;
+        })
+        if(newArr.length>0){
+          item.count =newArr.length;
+
+        }
+        this.totalCategory.push(item)
+      }
+      this.newLabel='Problem Category'
+      
+
+
+
+
+    })
+
   }
 }
 

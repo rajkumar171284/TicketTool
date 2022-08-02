@@ -9,6 +9,9 @@ import { Subject, BehaviorSubject } from 'rxjs';
 })
 export class PlotlyComponent implements OnInit, OnChanges {
   @Input('pMap') pMap: any;
+  @Input() totalCategory!: any;
+  @Input() newLabel!: any;
+  
   public data: any;
   public layOut: any;
   graph = {
@@ -17,20 +20,20 @@ export class PlotlyComponent implements OnInit, OnChanges {
     pointIndex: 1
   };
 
-  graph1 = {
+  graph1:any = {
     data: [
       { x: [1, 2, 3], y: [2, 3, 4], type: 'bar' },
     ],
-    layout: {title: 'Some Data to Hover Over'}
+    layout: { title: this.newLabel}
   };
 
-  graph2 = {
+  graph2:any = {
     data: [
       { x: [1, 2, 3, 4, 5], y: [1, 4, 9, 4, 1], type: 'scatter' },
       { x: [1, 2, 3, 4, 5], y: [1, 3, 6, 9, 6], type: 'scatter' },
       { x: [1, 2, 3, 4, 5], y: [1, 2, 4, 5, 6], type: 'scatter' },
     ],
-    layout: {title: 'Some Data to Highlight'}
+    layout: { title: 'Some Data to Highlight' }
   };
 
   interactivePlotSubject$: Subject<any> = new BehaviorSubject<any>(this.graph2.data);
@@ -42,9 +45,13 @@ export class PlotlyComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     // console.log(changes)
+    console.log(this.totalCategory)
     if (this.pMap === 'scatter2') {
+
       this.data = [
-        { x: [1, 2, 3, 4, 5, 6, 7, 8, 9,], y: [2, 5, 3, 4, 7, 2, 44, 11, 1], type: 'bar', marker: { color: '#6666ff' }, backgroundColor: 'red' }
+        { x: this.totalCategory.map((z:any)=>z.key), 
+          y: this.totalCategory.map((z:any)=>z.count),
+           type: 'bar', marker: { color: '#6666ff' }, backgroundColor: 'red' }
 
       ]
 
@@ -53,7 +60,8 @@ export class PlotlyComponent implements OnInit, OnChanges {
         plot_bgcolor: "rgba(0,0,0,0)",
         paper_bgcolor: "rgba(0,0,0,0)",
       }
-      this.graph.data = this.data;
+      this.graph1.data = this.data;
+      this.graph1.layout.title=this.newLabel;
 
     } else
       if (this.pMap === 'line') {

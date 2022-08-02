@@ -1,5 +1,10 @@
 <div class="container-fluid">
 
+    <div class="overlay" *ngIf="loader">
+        <mat-spinner></mat-spinner>
+
+    </div>
+
     <div class="floating">
         <button mat-fab mat-button (click)="openDialog()">
             <mat-icon>filter_list</mat-icon>
@@ -12,7 +17,7 @@
         <div class="col-md-12 dashboard-content">
 
 
-            <div style="height:200px  ;overflow:scroll">
+            <!-- <div style="height:200px  ;overflow:scroll">
                 <div *ngFor="let a of arr">
                     <pre>
                         <mat-card-subtitle>
@@ -21,20 +26,21 @@
                    
                 </pre>
                 </div>
-            </div>
+            </div> -->
 
             <div class="row">
 
                 <div class="col-md-3">
                     <mat-card class="result1">
 
-                        <mat-card-subtitle>Yearly Rpt</mat-card-subtitle>
+                        <mat-card-subtitle>TOTAL REQUEST</mat-card-subtitle>
                         <mat-card-content>
                             <div class="abs-content abs1">
                                 <mat-icon>av_timer</mat-icon>
 
                             </div>
-                            43645647<mat-icon style="color:#ddd">bookmark_border</mat-icon>
+                            {{totalData.length}}
+                            <mat-icon style="color:#ddd">bookmark_border</mat-icon>
 
                         </mat-card-content>
 
@@ -46,13 +52,14 @@
                 <div class="col-md-3">
                     <mat-card class="result1">
 
-                        <mat-card-subtitle>Files Rpt</mat-card-subtitle>
+                        <mat-card-subtitle>TOTAL Closed</mat-card-subtitle>
                         <mat-card-content>
                             <div class="abs-content abs2">
                                 <mat-icon>notifications_none</mat-icon>
 
                             </div>
-                            9878.00 <mat-icon style="color:green">arrow_upward</mat-icon>
+                            {{totalClosedData.length}}
+                            <mat-icon style="color:green">arrow_upward</mat-icon>
 
                         </mat-card-content>
 
@@ -63,13 +70,14 @@
                 <div class="col-md-3">
                     <mat-card class="result1">
 
-                        <mat-card-subtitle>Notifications</mat-card-subtitle>
+                        <mat-card-subtitle>TOTAL unClosed</mat-card-subtitle>
                         <mat-card-content>
                             <div class="abs-content abs3">
                                 <mat-icon>library_books</mat-icon>
 
                             </div>
-                            979<mat-icon style="color:#ddd">change_history</mat-icon>
+                            {{totalunClosedData.length}}
+                            <mat-icon style="color:#ddd">change_history</mat-icon>
 
                         </mat-card-content>
 
@@ -79,13 +87,15 @@
                 <div class="col-md-3">
                     <mat-card class="result1">
 
-                        <mat-card-subtitle>Pending</mat-card-subtitle>
+                        <mat-card-subtitle>total Resolved </mat-card-subtitle>
                         <mat-card-content>
                             <div class="abs-content abs4">
                                 <mat-icon>list_alt</mat-icon>
 
                             </div>
-                            10<mat-icon style="color:red">arrow_downward</mat-icon>
+                            
+                            {{totalResolvedData.length}}
+                            <mat-icon style="color:red">arrow_downward</mat-icon>
 
                         </mat-card-content>
 
@@ -97,17 +107,17 @@
             </div>
 
 
-            <div class="row ">
+            <!-- <div class="row ">
 
                 <div class="col-md-12">
                     <mat-card class="result2 mt-4 mb-3">
-                        <app-leaflet></app-leaflet>
+                        <app-leaflet ></app-leaflet>
 
 
                     </mat-card>
                 </div>
 
-            </div>
+            </div> -->
 
 
             <div class="row ">
@@ -116,7 +126,7 @@
                     <mat-card class="result2 mt-4 mb-3">
 
                         <!-- <app-chartjs [monthsData]="monthsData" chartType="chart1"></app-chartjs> -->
-                        <app-plotly pMap="scatter2"></app-plotly>
+                        <app-plotly [totalCategory]="totalCategory" [newLabel]="newLabel" pMap="scatter2"></app-plotly>
 
 
                     </mat-card>
