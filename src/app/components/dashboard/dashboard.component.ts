@@ -234,10 +234,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
       })
       this.totalLoc = [...new Set(loc)].map(z => z);
 
+      // get all catg of TAGS
+      const tagKey="Tag";
 
       const uniq = z.map(item => {
 
-        return item["Problem Category"];
+        return item[tagKey];
       })
       // console.log('uniq', uniq)
       const totalCategory = [...new Set(uniq)].map(z => z);
@@ -248,7 +250,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         item.count=0;
 
         const newArr = this.totalData.filter((obj:any)=>{
-        return obj["Problem Category"]==a;
+        return obj[tagKey]==a;
         })
         if(newArr.length>0){
           item.count =newArr.length;
@@ -256,7 +258,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
         this.totalCategory.push(item)
       }
-      this.newLabel='Problem Category vs Total Count'
+      this.newLabel='Tags'
       
 
 
