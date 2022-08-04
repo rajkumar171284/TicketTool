@@ -11,8 +11,9 @@ import { ajax } from 'rxjs/ajax';
 const apiData = ajax('/assets/Ticketdump2_sample.xlsx');
 // import { WorkBook, read, utils, write, readFile, } from 'xlsx';
 import * as XLSX from 'xlsx';
-import { Subscription, Observable, of, concatMap } from 'rxjs';
+import { Subscription, Observable, of, from, concatMap, switchMap, take } from 'rxjs';
 import { delay } from "rxjs/operators";
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,30 +25,39 @@ export class DashboardComponent implements OnInit, OnDestroy {
   dataObserver$!: Observable<any[]>;
 
 
+  // options: CloudOptions = {
+  //   // if width is between 0 and 1 it will be set to the width of the upper element multiplied by the value
+  //   width: 1000,
+  //   // if height is between 0 and 1 it will be set to the height of the upper element multiplied by the value
+  //   height: 400,
+  //   overflow: false,
+  // };
   options: CloudOptions = {
-    // if width is between 0 and 1 it will be set to the width of the upper element multiplied by the value
-    width: 1000,
-    // if height is between 0 and 1 it will be set to the height of the upper element multiplied by the value
+    width: 0.8,
     height: 400,
     overflow: false,
+    zoomOnHover: {
+      scale: 1.2,
+      transitionTime: 0.3,
+      delay: 0.3
+    },
+    realignOnResize: true
   };
-
   data: CloudData[] = [
-    { text: 'Web App', weight: 1, position: { left: 2, top: 50 } },
-    { text: 'Test Cases', weight: 2 },
-    { text: 'Approval Pending', weight: 3, position: { left: 12, top: 60 } },
-    { text: 'Result Weight', weight: 5 },
-    { text: 'Big data', color: 'red', weight: 6, position: { left: 2, top: 110 } },
-    { text: 'Mail Request', weight: 2 },
-    { text: 'Output:Success', weight: 3, position: { left: 514, top: 130 } },
-    { text: 'Analysis', weight: 1 },
-    { text: 'Random View', color: 'white', weight: 2, position: { left: 6, top: 15 } },
-    // { text: 'Weight-8-random', weight: 4 },
+    // { text: 'Web App', weight: 1, position: { left: 2, top: 50 } },
+    // { text: 'Test Cases', weight: 2 },
+    // { text: 'Approval Pending', weight: 3, position: { left: 12, top: 60 } },
+    // { text: 'Result Weight', weight: 5 },
+    // { text: 'Big data', color: 'red', weight: 6, position: { left: 2, top: 110 } },
+    // { text: 'Mail Request', weight: 2 },
+    // { text: 'Output:Success', weight: 3, position: { left: 514, top: 130 } },
+    // { text: 'Analysis', weight: 1 },
+    // { text: 'Random View', color: 'white', weight: 2, position: { left: 6, top: 15 } },
 
-    // ...
   ];
 
   constructor(public dialog: MatDialog, private api: ApiService) {
+    this.initCall();
   }
   monthsData: any = [
     'January',
@@ -66,8 +76,118 @@ export class DashboardComponent implements OnInit, OnDestroy {
     'May',
     'June',
   ]
+
+  getTotalTickets(myArray: any) {
+    this.totalData = [];
+    this.data=[];
+    // from(myArray).subscribe(res => {
+    //   // this.totalData=res;
+    //   // console.log(res)
+    //   this.totalData.push(res);
+    //   this.data.push({
+
+    //   })
+    // })
+    // of(myArray).subscribe((newItem:any)=>{
+    //   console.log(newItem)
+    //   // this.getTagData(newItem)
+    // }) 
+
+    of(myArray).pipe(concatMap((item) => of(item).pipe(delay(0)))).subscribe((timedItem: any) => {
+      console.log(timedItem);
+      this.totalData=timedItem;
+      // get all catg of TAGS starts
+      const tagKey = "Tag";
+      const uniq = timedItem.map((item: any) => {
+        return item[tagKey];
+      })
+      // console.log('uniq', uniq)
+      const totalCategory = [...new Set(uniq)].map(z => z);///get total tags with uniq
+      this.totalCategory = [];
+      for (let a of totalCategory) {
+        // reform tags
+        let item: any = {};
+        item.key = a;
+        item.count = 0;
+        const newArr = this.totalData.filter((obj: any) => {
+          return obj[tagKey] == a;
+        })
+        if (newArr.length > 0) {
+          item.count = newArr.length;
+        }
+        this.totalCategory.push(item)
+      }
+      this.newLabel = "Tags vs Tags count";
+      
+      // word cloud starts
+
+    });
+
+
+    // from(myArray).pipe(concatMap((item) => of(item).pipe(delay(0))))
+    //   .subscribe((timedItem: any) => {
+    //     // console.log(timedItem);
+    //     this.totalData.push(timedItem);
+    //   });
+  }
+  getWordCloud(result: any) {
+    this.data = result.map((item: any) => {
+      return {
+        text: item.key, weight: item.count
+      }
+    });
+
+  }
+  getTagData(result: any) {
+   
+    if (result) {
+      
+      // get all catg of TAGS starts
+      const tagKey = "Tag";
+      const uniq = result.map((item: any) => {
+        return item[tagKey];
+      })
+      // console.log('uniq', uniq)
+      const totalCategory = [...new Set(uniq)].map(z => z);///get total tags with uniq
+      this.totalCategory = [];
+      for (let a of totalCategory) {
+        // reform tags
+        let item: any = {};
+        item.key = a;
+        item.count = 0;
+        const newArr = this.totalData.filter((obj: any) => {
+          return obj[tagKey] == a;
+        })
+        if (newArr.length > 0) {
+          item.count = newArr.length;
+        }
+        this.totalCategory.push(item)
+      }
+      this.newLabel = "Tags vs Tags count";
+      // get all catg of TAGS ends
+      // call word coud
+      if (this.totalCategory.length > 0) {
+        this.getWordCloud(this.totalCategory);
+      }
+    }
+  }
+  initCall(){
+    this.api.getDatafromCSV().then(result => {
+      if (result) {
+        // console.log(result)
+        this.getTotalTickets(result);
+        // this.getTagData(result);
+
+      }
+    });
+  }
   ngOnInit(): void {
-    this.getData()
+
+    // this.initCall()
+
+
+    // this.getData()
+
     // this.getJSON()
 
     // apiData.subscribe(res => console.log(res.status, res.response));
@@ -139,12 +259,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   }
   openDialog() {
-    const item={
-      totalCategory:this.totalCategory,totalLoc:this.totalLoc
+    const item = {
+      totalCategory: this.totalCategory, totalLoc: this.totalLoc
     }
-    const dialogRef = this.dialog.open(FilterDialogComponent,{
+    const dialogRef = this.dialog.open(FilterDialogComponent, {
       backdropClass: 'backdropBackground', // This is the "wanted" line
-      data:item
+      data: item
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -196,7 +316,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   totalCategory: any = [];
   totalLoc: any = [];
 
-  newLabel:any;
+  newLabel: any;
   async getData() {
     let url = '/../assets/test-data2.xlsx';
     const data = await (await fetch(url)).arrayBuffer();
@@ -207,14 +327,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const sheetValues = XLSX.utils.sheet_to_json(worksheet);
 
     const groupByCategory = sheetValues.reduce((group, product) => {
-      // console.log(product)
       this.arr.push(product)
-
-
     })
     this.dataObserver$ = of(this.arr).pipe(concatMap(item => of(item).pipe(delay(1000))));
     this.dataObserver$.subscribe(z => {
-      console.log(z)
+      // console.log(z)
       this.totalData = z;
       if (z) {
         this.loader = false;
@@ -234,38 +351,88 @@ export class DashboardComponent implements OnInit, OnDestroy {
       })
       this.totalLoc = [...new Set(loc)].map(z => z);
 
-      // get all catg of TAGS
-      const tagKey="Tag";
-
+      // get all catg of TAGS starts
+      const tagKey = "Tag";
       const uniq = z.map(item => {
-
         return item[tagKey];
       })
       // console.log('uniq', uniq)
-      const totalCategory = [...new Set(uniq)].map(z => z);
-      this.totalCategory=[];
-      for(let a of totalCategory){
-        let item:any={};
-        item.key=a;
-        item.count=0;
-
-        const newArr = this.totalData.filter((obj:any)=>{
-        return obj[tagKey]==a;
+      const totalCategory = [...new Set(uniq)].map(z => z);///get total tags with uniq
+      this.totalCategory = [];
+      for (let a of totalCategory) {
+        // reform tags
+        let item: any = {};
+        item.key = a;
+        item.count = 0;
+        const newArr = this.totalData.filter((obj: any) => {
+          return obj[tagKey] == a;
         })
-        if(newArr.length>0){
-          item.count =newArr.length;
+        if (newArr.length > 0) {
+          item.count = newArr.length;
 
         }
         this.totalCategory.push(item)
       }
-      this.newLabel='Tags'
-      
+      this.newLabel = "Tags vs Tags count";
+      // get all catg of TAGS ends
+
+      // word cloud starts
+
+      // this.data = [
+      //   { text: 'Web App', weight: 1, position: { left: 2, top: 50 } },
+      //   { text: 'Test Cases', weight: 2 },
+      //   { text: 'Approval Pending', weight: 3, position: { left: 12, top: 60 } },
+      //   { text: 'Result Weight', weight: 5 },
+      //   { text: 'Big data', color: 'red', weight: 6, position: { left: 2, top: 110 } },
+      //   { text: 'Mail Request', weight: 2 },
+      //   { text: 'Output:Success', weight: 3, position: { left: 514, top: 130 } },
+      //   { text: 'Analysis', weight: 1 },
+      //   { text: 'Random View', color: 'white', weight: 2, position: { left: 6, top: 15 } },
+
+      // ];
+      // const data =   this.totalData.filter((item: any) => {        
+      //   return item.Tag;
+      // }).map((result:any)=>{
+      //   return {
+      //     text: result.Tag, weight: 2
+      //     ,
+      //     position: { left: 2, top: 50 } 
+      //   }
+      // })
+
+      const myArray = this.totalData;
+      if (this.totalCategory.length > 0) {
 
 
+        this.data = this.totalCategory.map((item: any) => {
+          return {
+            text: item.key, weight: item.count
+          }
+        });
+      }
+      from(myArray).pipe(concatMap((item) => of(item).pipe(delay(1000))))
+        .subscribe((timedItem: any) => {
+          console.log(timedItem);
+          // this.data.push({
+
+          //   text: timedItem.Tag, weight: 2
+          //   ,
+          //   position: { left: 2, top: 50 }
+
+          // })
+          console.log(this.data)
+        });
+
+
+
+      // word cloud ends
 
 
     })
 
+  }
+  log(eventType: string, e?: any) {
+    console.log(eventType, e);
   }
 }
 

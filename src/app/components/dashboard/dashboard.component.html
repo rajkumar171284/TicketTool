@@ -33,7 +33,7 @@
                 <div class="col-md-3">
                     <mat-card class="result1">
 
-                        <mat-card-subtitle>TOTAL REQUEST</mat-card-subtitle>
+                        <mat-card-subtitle>TOTAL Tickets</mat-card-subtitle>
                         <mat-card-content>
                             <div class="abs-content abs1">
                                 <mat-icon>av_timer</mat-icon>
@@ -52,7 +52,7 @@
                 <div class="col-md-3">
                     <mat-card class="result1">
 
-                        <mat-card-subtitle>TOTAL Closed</mat-card-subtitle>
+                        <mat-card-subtitle>Number of Months</mat-card-subtitle>
                         <mat-card-content>
                             <div class="abs-content abs2">
                                 <mat-icon>notifications_none</mat-icon>
@@ -70,7 +70,7 @@
                 <div class="col-md-3">
                     <mat-card class="result1">
 
-                        <mat-card-subtitle>TOTAL unClosed</mat-card-subtitle>
+                        <mat-card-subtitle>Total Service Requests</mat-card-subtitle>
                         <mat-card-content>
                             <div class="abs-content abs3">
                                 <mat-icon>library_books</mat-icon>
@@ -87,7 +87,7 @@
                 <div class="col-md-3">
                     <mat-card class="result1">
 
-                        <mat-card-subtitle>total Resolved </mat-card-subtitle>
+                        <mat-card-subtitle>Total Incident </mat-card-subtitle>
                         <mat-card-content>
                             <div class="abs-content abs4">
                                 <mat-icon>list_alt</mat-icon>
@@ -106,6 +106,23 @@
 
             </div>
 
+
+            <div class="row">
+                <div class="col-md-12 ">
+                    <mat-card class=" mt-4 mb-3 wordCloud">
+
+                        <angular-tag-cloud (clicked)="log('clicked', $event)" [data]="data" [width]="options.width" [height]="options.height"
+                            [overflow]="options.overflow"  [zoomOnHover]="options.zoomOnHover" [realignOnResize]="options.realignOnResize">
+                        </angular-tag-cloud>
+                    </mat-card>
+                </div>
+
+                <div class="col-md-12 ">
+                    <!-- <app-heatmap-plotly pMap="scatter2"></app-heatmap-plotly> -->
+                    <!-- <app-chartjs [monthsData2]="monthsData2" chartType="chart2"></app-chartjs> -->
+
+                </div>
+            </div>
 
             <!-- <div class="row ">
 
@@ -143,22 +160,7 @@
 
             <!-- -->
 
-            <div class="row">
-                <div class="col-md-12 ">
-                    <mat-card class=" mt-4 mb-3 wordCloud">
-
-                        <angular-tag-cloud [data]="data" [width]="options.width" [height]="options.height"
-                            [overflow]="options.overflow">
-                        </angular-tag-cloud>
-                    </mat-card>
-                </div>
-
-                <div class="col-md-12 ">
-                    <!-- <app-heatmap-plotly pMap="scatter2"></app-heatmap-plotly> -->
-                    <!-- <app-chartjs [monthsData2]="monthsData2" chartType="chart2"></app-chartjs> -->
-
-                </div>
-            </div>
+           
 
 
             <div class="row">
