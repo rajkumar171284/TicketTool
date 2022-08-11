@@ -20,6 +20,7 @@ const apiData2 = ajax('/assets/result.json');
 // import myj from '../../../assets/result.json';
 // import * as data from '../../../assets/result';
 import * as moment from 'moment';
+import { newArray } from '@angular/compiler/src/util';
 const date = new Date();
 
 @Component({
@@ -317,8 +318,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   startPriority(dateFrom: any, dateTo: any) {
     const { Priority, Opened, Resolved } = this.responseResult;
 
-
-    this.TrendAnalysis.Priority = this.getPriority(Priority, dateFrom, dateTo);
+    this.TrendAnalysis.Priority=[];
+    this.getPriority(Priority, dateFrom, dateTo);
     this.TrendAnalysis.PriorityLabel = 'Priority vs Count'//done
     console.log('PriorityLabel', this.TrendAnalysis)
   }
@@ -366,8 +367,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         console.log(result)
         this.responseResult = result[0];
         this.loadData(this.dateFrom, this.dateTo);
-
-
         const { pred_category, Updated, Priority, Opened, Resolved } = result[0];
 
         // console.log(pred_category)
@@ -547,7 +546,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   }
   getPriority(Priority: any, dateFrom: any, dateTo: any) {
-    console.log('Priority', dateFrom, dateTo)
+    // console.log('Priority', dateFrom, dateTo)
+    let newArray: any = [];
+    const start = moment(dateFrom).format("DD-MM-YYYY");
+    const end = moment(dateTo).format("DD-MM-YYYY");
+    // console.log('start end', start, end)
+
     const { Resolved } = this.responseResult;
 
     let ResolvedList: any[] = Object.values(Resolved).map(z => z);
@@ -557,50 +561,44 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
       let item: any = {};
       item.key = z;
-      item.Resolved = new Date(ResolvedList[index])
+      item.Resolved = new Date(ResolvedList[index]);
 
+      item.Resolved = moment(item.Resolved).format("DD-MM-YYYY");
       list.push(item)
     });
 
-    from(list).pipe(map((a: any) => {
-
+    of(list).pipe(map((a: any) => {
       return a;
-    }),filter((rest: any) => {
-      console.log(rest)
-      var date = moment(rest.Resolved).format("DD-MM-YYYY");
-      const start = moment(dateFrom).format("DD-MM-YYYY");
-      const end = moment(dateTo).format("DD-MM-YYYY");
-      if((date >= start && date <= end)){
-        console.log('tet')
-      }
-      // return (date >= start && date <= end);
-      return rest;
     })).subscribe(result => {
-      console.log('Priority result', result)
+      // console.log('Priority result', result)
+
       this.loading = false;
-      if (result.length > 0) {
-
-      }
-      const Catg = result;
-      const uniq = [...new Set(Catg)].map(z => z);
-
-      let total: any[] = [];
-
-      from(uniq).subscribe((a: any) => {
+      result.forEach((rest: any) => {
+        // console.log('rest.Resolved',rest.Resolved)
+        if (new Date(rest.Resolved) >= new Date(start) && new Date(rest.Resolved) <= new Date(end)) {
+          // console.log('rest.Resolved',rest.Resolved)
+          newArray.push(rest.key);
+        }
+      })
+      // get unique
+      const uniq = [...new Set(newArray)].map(z=>z);
+      let total: any = [];
+      console.log(uniq)
+      uniq.forEach((a: any) => {
         if (a) {
           let item: any = {};
-          item.key = a.key;
+          item.key = a;
           item.count = 0;
-          const newArr = Catg.filter((obj: any) => {
+          const newArr = newArray.filter((obj: any) => {
             return obj == a;
-          });
+          })
+          console.log(newArr)
           if (newArr.length > 0) {
             item.count = newArr.length;
           }
-          total.push(item)
+          this.TrendAnalysis.Priority.push(item)
         }
       })
-
       return total;
     })
 
