@@ -12,8 +12,15 @@ const apiData = ajax('/assets/Ticketdump2_sample.xlsx');
 // import { WorkBook, read, utils, write, readFile, } from 'xlsx';
 import * as XLSX from 'xlsx';
 import { Subscription, Observable, of, from, concatMap, switchMap, take } from 'rxjs';
-import { delay } from "rxjs/operators";
-import { filter } from 'rxjs/operators';
+import { delay, tap, map, filter, mergeMap, startWith } from "rxjs/operators";
+const apiData2 = ajax('/assets/result.json');
+// import EmployeesJson from '../assets/test.json';
+// import {default as a} from "../../../assets/test";
+
+// import myj from '../../../assets/result.json';
+// import * as data from '../../../assets/result';
+import * as moment from 'moment';
+const date = new Date();
 
 @Component({
   selector: 'app-dashboard',
@@ -21,17 +28,15 @@ import { filter } from 'rxjs/operators';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  newMTTRList: any = [];
   private subscription: Subscription | undefined;
   dataObserver$!: Observable<any[]>;
+  loading: boolean = false;
+  startDate = date.setDate(date.getDate() - 7);
+  overAllData: any;
+  dateFrom: any;
+  dateTo: any;
 
-
-  // options: CloudOptions = {
-  //   // if width is between 0 and 1 it will be set to the width of the upper element multiplied by the value
-  //   width: 1000,
-  //   // if height is between 0 and 1 it will be set to the height of the upper element multiplied by the value
-  //   height: 400,
-  //   overflow: false,
-  // };
   options: CloudOptions = {
     width: 0.8,
     height: 400,
@@ -43,21 +48,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     },
     realignOnResize: true
   };
-  data: CloudData[] = [
-    // { text: 'Web App', weight: 1, position: { left: 2, top: 50 } },
-    // { text: 'Test Cases', weight: 2 },
-    // { text: 'Approval Pending', weight: 3, position: { left: 12, top: 60 } },
-    // { text: 'Result Weight', weight: 5 },
-    // { text: 'Big data', color: 'red', weight: 6, position: { left: 2, top: 110 } },
-    // { text: 'Mail Request', weight: 2 },
-    // { text: 'Output:Success', weight: 3, position: { left: 514, top: 130 } },
-    // { text: 'Analysis', weight: 1 },
-    // { text: 'Random View', color: 'white', weight: 2, position: { left: 6, top: 15 } },
-
+  data: CloudData[] = [];
+  myData = [
+    ['London', 8136000],
+    ['New York', 8538000],
+    ['Paris', 2244000],
+    ['Berlin', 3470000],
+    ['Kairo', 19500000]
   ];
-
   constructor(public dialog: MatDialog, private api: ApiService) {
-    this.initCall();
+
   }
   monthsData: any = [
     'January',
@@ -76,26 +76,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
     'May',
     'June',
   ]
+  // originalData: any = [];
+  TrendAnalysis: any = {
+    xAxis: [], yAxis: [], zAxis: [],
+    Priority: []
 
+  }; //headmap
+  jsonResponse: any = [];
+  responseResult: any;
+  tagWithDate: any = [];
   getTotalTickets(myArray: any) {
     this.totalData = [];
-    this.data=[];
-    // from(myArray).subscribe(res => {
-    //   // this.totalData=res;
-    //   // console.log(res)
-    //   this.totalData.push(res);
-    //   this.data.push({
-
-    //   })
-    // })
-    // of(myArray).subscribe((newItem:any)=>{
-    //   console.log(newItem)
-    //   // this.getTagData(newItem)
-    // }) 
+    this.data = [];
 
     of(myArray).pipe(concatMap((item) => of(item).pipe(delay(0)))).subscribe((timedItem: any) => {
-      console.log(timedItem);
-      this.totalData=timedItem;
+      // console.log(timedItem);
+      this.totalData = timedItem;
       // get all catg of TAGS starts
       const tagKey = "Tag";
       const uniq = timedItem.map((item: any) => {
@@ -118,30 +114,27 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.totalCategory.push(item)
       }
       this.newLabel = "Tags vs Tags count";
-      
+
       // word cloud starts
+      this.getWordCloud(this.totalCategory)
 
     });
 
-
-    // from(myArray).pipe(concatMap((item) => of(item).pipe(delay(0))))
-    //   .subscribe((timedItem: any) => {
-    //     // console.log(timedItem);
-    //     this.totalData.push(timedItem);
-    //   });
   }
   getWordCloud(result: any) {
+    // console.log(result)
     this.data = result.map((item: any) => {
       return {
-        text: item.key, weight: item.count
+        text: `${item.key}-${item.count} `, weight: item.count
       }
     });
+    this.loader = false;
 
   }
   getTagData(result: any) {
-   
+
     if (result) {
-      
+
       // get all catg of TAGS starts
       const tagKey = "Tag";
       const uniq = result.map((item: any) => {
@@ -171,91 +164,448 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     }
   }
-  initCall(){
-    this.api.getDatafromCSV().then(result => {
+
+  getTags(category: any) {
+    // console.log(category)
+    const catg = Object.values(category).map(x => x)
+    // console.log(catg)
+    const totalCategory = [...new Set(catg)].map(z => z);///get total tags with uniq
+    this.totalCategory = [];
+    for (let a of totalCategory) {
+      // reform tags
+      let item: any = {};
+      item.key = a;
+      item.count = 0;
+      const newArr = catg.filter((obj: any) => {
+        return obj == a;
+      })
+      if (newArr.length > 0) {
+        item.count = newArr.length;
+
+      }
+      if (item.key) {
+        this.totalCategory.push(item)
+      }
+    }
+    console.log(this.totalCategory)
+    this.newLabel = "Tags vs Tags count";
+    this.getWordCloud(this.totalCategory)
+  }
+
+  getTotalServReq() {
+    return 130;
+  }
+
+  ngOnInit(): void {
+
+
+    this.dateTo = new Date();
+    let fromdate: any = moment().subtract(10, 'months');
+    this.dateFrom = new Date(fromdate);
+    console.log(this.dateTo, this.dateFrom)
+    this.initCall();
+  }
+  dateOccurance(all_dates: any) {
+    let newArr = [];
+    const newall_dates = Object.values(all_dates).map((z: any) => moment(z).format("DD-MM-YYYY"));
+
+    let uniqDates: any = this.getDates2(all_dates);
+    // console.log(uniqDates)
+    for (let a of uniqDates) {
+      let item: any = {}
+      item.data = [];
+      item.data = newall_dates.filter((z: any) => {
+        return z == a;
+      }).map(res => {
+        item.date = a;
+        return res ? 1 : 0;
+      })
+      newArr.push(item.data)
+    }
+    // console.log(newArr)
+    // console.log(this.tagWithDate)
+    return newArr;
+  }
+
+  dateOccurance2(all_dates: any) {
+    let newArr = [];
+    const newall_dates = Object.values(all_dates).map((z: any) => moment(z).format("DD-MM-YYYY"));
+
+
+    for (let d of this.TrendAnalysis.zAxis) {
+      let item: any = {}
+      item.data = [];
+      for (let a of d.dates) {
+
+        item.data = newall_dates.filter((z: any) => {
+          return z == a;
+        }).map(res => {
+          item.date = a;
+          return res ? 1 : 0;
+        })
+        newArr.push(item.data)
+      }
+    }
+
+    let uniqDates: any = this.getDates2(all_dates);
+
+    // console.log(uniqDates)
+    for (let a of uniqDates) {
+      let item: any = {}
+      item.data = [];
+      item.data = newall_dates.filter((z: any) => {
+        return z == a;
+      }).map(res => {
+        item.date = a;
+        return res ? 1 : 0;
+      })
+      newArr.push(item.data)
+    }
+    // console.log(newArr)
+    console.log(this.tagWithDate)
+    return newArr;
+  }
+
+  getAllTags(arr: any) {
+    return Object.values(arr).map((z: any) => z);
+  }
+  getAllDateTimes(all_dates: any) {
+    return Object.values(all_dates).map((z: any) => z);
+
+  }
+
+  getAllUpdatedDates(all_dates: any) {
+    return Object.values(all_dates).map((z: any) => moment(z).format("DD-MM-YYYY"));
+
+  }
+  getDates(all_dates: any) {
+    const val = Object.values(all_dates).map((z: any) => new Date(z));
+    // const val = Object.values(all_dates).map((z: any) => moment(z).format("DD-MM-YYYY"));
+
+    const uniq = [...new Set(val)].map(z => z);
+    return uniq;
+  }
+  getDates2(all_dates: any) {
+    const val = Object.values(all_dates).map((z: any) => moment(z).format("DD-MM-YYYY"));
+    const uniq = [...new Set(val)].map(z => z);
+    return uniq;
+  }
+  getCatg(all_category: any) {
+    const Catg = Object.values(all_category).map(z => z);
+    const uniq = [...new Set(Catg)].map(z => z);
+    return uniq;
+  }
+
+  getMTTR(resp: any) {
+    if (resp.Tag) {
+      // this.originalData.push(resp);
+      const index = this.newMTTRList.findIndex((key: any) => {
+        return key.Tag == resp.Tag;
+      })
+      if (index == -1) {
+        // not found then push
+        this.newMTTRList.push(resp)
+      } else {
+        // existing
+        this.newMTTRList[index].hours = resp.hours;
+        this.newMTTRList[index].count++;
+      }
+    }
+
+  }
+
+  startPriority(dateFrom: any, dateTo: any) {
+    const { Priority, Opened, Resolved } = this.responseResult;
+
+
+    this.TrendAnalysis.Priority = this.getPriority(Priority, dateFrom, dateTo);
+    this.TrendAnalysis.PriorityLabel = 'Priority vs Count'//done
+    console.log('PriorityLabel', this.TrendAnalysis)
+  }
+  loadData(dateFrom: any, dateTo: any) {
+    const { pred_category, Updated, Priority, Opened, Resolved } = this.responseResult;
+    // MTTR analysis. i.e.  (END TIME – START TIME)= MTTR.  if ticket is created at 01.01.2022 at 12pm and closed at 02.01.2022 at 1pm then MTTR is 25 hours. For each TAGS we should have a AVERAGE MTTR.
+
+    // start-- format opened dates starts
+    const openedDates = this.getAllDateTimes(Opened);
+    // format Resolved dates starts
+    const ResolvedDates = this.getAllDateTimes(Resolved);
+    // get all tags
+    const alltags = this.getAllTags(pred_category);
+
+
+    from(openedDates).pipe(map((key: any, index) => {
+
+      return {
+        Opened: new Date(key),
+        Resolved: new Date(ResolvedDates[index]),
+        Tag: alltags[index],
+        hours: this.api.diff_hours(new Date(ResolvedDates[index]), new Date(key)),
+        count: 1
+        // index:index
+      }
+
+    }), filter((req: any) => {
+      var date = req.Resolved;
+      const start = new Date(dateFrom);
+      const end = new Date(dateTo);
+      return (date >= start && date <= end);
+    })
+
+    ).subscribe(resp => {
+      // console.log('subscribe', resp)
+      this.getMTTR(resp);
+      this.loading = false;
+    })
+  }
+  initCall() {
+
+    // this.originalData = [];
+    this.api.getTickets().subscribe(result => {
       if (result) {
-        // console.log(result)
-        this.getTotalTickets(result);
-        // this.getTagData(result);
+        console.log(result)
+        this.responseResult = result[0];
+        this.loadData(this.dateFrom, this.dateTo);
+
+
+        const { pred_category, Updated, Priority, Opened, Resolved } = result[0];
+
+        // console.log(pred_category)
+
+        // MTTR analysis. i.e.  (END TIME – START TIME)= MTTR.  if ticket is created at 01.01.2022 at 12pm and closed at 02.01.2022 at 1pm then MTTR is 25 hours. For each TAGS we should have a AVERAGE MTTR.
+
+        // start-- format opened dates starts
+        // const openedDates = this.getAllDateTimes(Opened);
+        // format Resolved dates starts
+        // const ResolvedDates = this.getAllDateTimes(Resolved);
+
+
+        // from(openedDates).pipe(map((key: any, index) => {
+
+        //   return {
+        //     Opened: new Date(key),
+        //     Resolved: new Date(ResolvedDates[index]),
+        //     Tag: alltags[index],
+        //     hours: this.api.diff_hours(new Date(ResolvedDates[index]), new Date(key)),
+        //     count: 1
+        //     // index:index
+        //   }
+
+        // }), filter((req: any) => {
+        //   var date = req.Resolved;  
+        //   const start = new Date(req.START_DATE);
+        //   const end = new Date(req.END_DATE);
+        //   return (date >= start && date <= end);
+        // })
+
+        // ).subscribe(resp => {
+        //   // console.log('subscribe',resp)
+        //   this.getMTTR(resp);
+
+        // })
+
+        console.log('newMTTRList', this.newMTTRList);
+
+        // get all tags
+        const alltags = this.getAllTags(pred_category);
+
+
+        // format tags with dates starts
+        const tagsDates = this.getAllUpdatedDates(Updated);
+        // console.log(tagsDates)
+
+        this.tagWithDate = [];
+        alltags.forEach((ele, index) => {
+
+          let item: any = {};
+          item.Tag = ele;
+          item.date = tagsDates[index];
+          this.tagWithDate.push(item)
+        })
+        // console.log(this.tagWithDate)
+
+        const uniqTags = this.getCatg(pred_category);//get unique tag names
+        let newuniqTags: any = []
+        for (let a of uniqTags) {
+
+          this.tagWithDate.filter((itm: any) => {
+            return itm.Tag == a;
+          }).map((res: any) => {
+            // console.log(res)
+            let idx = newuniqTags.findIndex((obj: any) => {
+              return obj.Tag == res.Tag;
+            })
+            if (idx == -1) {
+              let item: any = {
+                Tag: res.Tag,
+                dates: [res.date],
+              }
+              newuniqTags.push(item)
+            } else {
+              newuniqTags[idx].dates.push(res.date)
+            }
+
+          })
+
+        }
+
+
+        for (let a of newuniqTags) {
+          a.dateOccurance = [];
+
+          for (let date of a.dates) {
+
+            let idx = a.dateOccurance.findIndex((obj: any) => {
+              return obj.date == date;
+            })
+            if (idx == -1) {
+              let occur = 0;
+              a.dateOccurance.push(
+                {
+                  date: date, occurance: occur + 1
+                }
+              )
+
+            } else {
+              a.dateOccurance[idx].occurance++
+            }
+          }
+
+        }
+        console.log(newuniqTags)
+        // format tags with dates ends
+
+        this.TrendAnalysis.xAxis = this.getCatg(pred_category);
+        this.TrendAnalysis.yAxis = this.getDates(Updated);
+
+        // this.TrendAnalysis.zAxis = this.dateOccurance(Updated);
+        // console.log(this.dateOccurance(Updated))
+        // console.log(this.dateOccurance2(Updated))
+        this.TrendAnalysis.zAxis = newuniqTags;
+
+        // bar chart- 
+        // Priority analysis i.e. graph for priority vs their count ( with filters for request/incident)
+
+        this.startPriority(this.dateFrom, this.dateTo);
+
+
+        this.overAllData = result;
+
+        of(result).pipe(map(res => res)).subscribe(itm => {
+          // console.log('itm', itm)
+          this.jsonResponse = itm.map((item: any) => {
+            // console.log(item)
+            let dindex = 0;
+            let totalMonth = 0;
+            for (let a of Object.values(item.Resolved)) {
+
+              let opened: any = Object.values(item.Opened)[dindex];
+
+              let resolved: any = a;
+
+              // console.log(typeof opened, typeof resolved)
+              if (typeof opened == 'number' && typeof resolved == 'number') {
+                // opened = parseInt(opened);
+                // resolved = parseInt(resolved);
+                let d1: any = new Date(opened).toISOString();
+                let d2: any = new Date(resolved).toISOString();
+                var months;
+
+
+                d1 = moment(d1).format("DD/MM/YYYY");
+                d2 = moment(d2).format("DD/MM/YYYY");
+
+                const getDate = (date: moment.MomentInput) => moment(date, 'DD/MM/YYYY').startOf('month')
+
+                const diff = Math.abs(getDate(d1).diff(getDate(d2), 'months'));
+
+                totalMonth = totalMonth + diff;
+              }
+
+              dindex++;
+            }
+
+            // total service req
+            const totalServiceReq = this.getTotalServReq()
+
+            return {
+              Incidentstate: item['Incident state'],
+              TotalTickts: Object.keys(item['Incident state']).length,
+              totalMonths: totalMonth,
+              Tags: this.getTags(item.pred_category),
+              totalServReq: totalServiceReq
+            }
+          });
+        })
+
+
+        console.log(this.jsonResponse)
+
 
       }
     });
+
   }
-  ngOnInit(): void {
+  getPriority(Priority: any, dateFrom: any, dateTo: any) {
+    console.log('Priority', dateFrom, dateTo)
+    const { Resolved } = this.responseResult;
 
-    // this.initCall()
+    let ResolvedList: any[] = Object.values(Resolved).map(z => z);
 
+    let list: any = [];
+    Object.values(Priority).forEach((z: any, index: number) => {
 
-    // this.getData()
+      let item: any = {};
+      item.key = z;
+      item.Resolved = new Date(ResolvedList[index])
 
-    // this.getJSON()
+      list.push(item)
+    });
 
-    // apiData.subscribe(res => console.log(res.status, res.response));
-    // this.subscription= this.api.getSampleTicket().subscribe(oReq => {
+    from(list).pipe(map((a: any) => {
 
-    //   var arraybuffer = oReq;
-    //   console.log(arraybuffer)
+      return a;
+    }),filter((rest: any) => {
+      console.log(rest)
+      var date = moment(rest.Resolved).format("DD-MM-YYYY");
+      const start = moment(dateFrom).format("DD-MM-YYYY");
+      const end = moment(dateTo).format("DD-MM-YYYY");
+      if((date >= start && date <= end)){
+        console.log('tet')
+      }
+      // return (date >= start && date <= end);
+      return rest;
+    })).subscribe(result => {
+      console.log('Priority result', result)
+      this.loading = false;
+      if (result.length > 0) {
 
-    //   /* convert data to binary string */
-    //   var data = new Uint8Array(arraybuffer);
-    //   var arr = new Array();
-    //   for (var i = 0; i != data.length; ++i) {
-    //     arr[i] = String.fromCharCode(data[i]);
-    //     // console.log("Data" + data[i]);
-    //   }
-    //   var bstr = arr.join("");
-    //   var workbook = XLSX.read(bstr, { type: "binary" });
-    //   //console.log("Data"+bstr);
-    //   var first_sheet_name = workbook.SheetNames[0];
-    //   /* Get worksheet */
-    //   var worksheet = workbook.Sheets[first_sheet_name];
-    //   var json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { header: 1, raw: true });
-    //   var jsonOut = JSON.stringify(json);
-    //   console.log("test" + jsonOut.length);
-    //   for(let a of jsonOut){
-    //     console.log("a" + a);
-    //   }
+      }
+      const Catg = result;
+      const uniq = [...new Set(Catg)].map(z => z);
 
+      let total: any[] = [];
 
-    // })
+      from(uniq).subscribe((a: any) => {
+        if (a) {
+          let item: any = {};
+          item.key = a.key;
+          item.count = 0;
+          const newArr = Catg.filter((obj: any) => {
+            return obj == a;
+          });
+          if (newArr.length > 0) {
+            item.count = newArr.length;
+          }
+          total.push(item)
+        }
+      })
 
-    // this.api.getSampleTicket().subscribe(data => {
-    //   console.log(data)
-    //   const blob = new Blob([data._body],
-    //     { type: 'application/json' });
-    //   const file = new File([blob], 'report.json',
-    //   {type:'mime'});
-    //   console.log('file', file)
-
-    //   // const contentType = data.type;
-    //   // const blob = new Blob([data], { type: contentType });
-
-
-    //   const url = window.URL.createObjectURL(blob);
-    //   // window.open(url);
-    //   let blob2 =  fetch(url).then(r => {
-
-    //   //  console.log(r) 
-    //     const d= r.blob()
-    //     console.log(d) 
-
-    //   });
-
-
-    // const blob = new Blob([data],{ type: contentType });
-    // var fileReader = new FileReader();
-    // fileReader.readAsText(file,"UTF-8");
-    // fileReader.onload = () => {
-    //   console.log(fileReader.result?.toString());
-    //   const str = fileReader.result?.toString();
-    //   console.log(str);
-    // const jsonObj=(JSON.parse(str));
-    // console.log(jsonObj)
-    // }
+      return total;
+    })
 
 
 
-    // })
 
   }
   openDialog() {
@@ -317,125 +667,155 @@ export class DashboardComponent implements OnInit, OnDestroy {
   totalLoc: any = [];
 
   newLabel: any;
-  async getData() {
-    let url = '/../assets/test-data2.xlsx';
-    const data = await (await fetch(url)).arrayBuffer();
-    /* data is an ArrayBuffer */
-    const workbook = XLSX.read(data);
-    const firstSheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[firstSheetName];
-    const sheetValues = XLSX.utils.sheet_to_json(worksheet);
+  // async getData() {
+  //   let url = '/../assets/test-data2.xlsx';
+  //   const data = await (await fetch(url)).arrayBuffer();
+  //   /* data is an ArrayBuffer */
+  //   const workbook = XLSX.read(data);
+  //   const firstSheetName = workbook.SheetNames[0];
+  //   const worksheet = workbook.Sheets[firstSheetName];
+  //   const sheetValues = XLSX.utils.sheet_to_json(worksheet);
 
-    const groupByCategory = sheetValues.reduce((group, product) => {
-      this.arr.push(product)
-    })
-    this.dataObserver$ = of(this.arr).pipe(concatMap(item => of(item).pipe(delay(1000))));
-    this.dataObserver$.subscribe(z => {
-      // console.log(z)
-      this.totalData = z;
-      if (z) {
-        this.loader = false;
-      }
-      this.totalClosedData = z.filter(item => {
-        return item.Status == "CLOSED";
-      })
-      this.totalunClosedData = z.filter(item => {
-        return item.Status != "CLOSED";
-      })
-      this.totalResolvedData = z.filter(item => {
+  //   const groupByCategory = sheetValues.reduce((group, product) => {
+  //     this.arr.push(product)
+  //   })
+  //   this.dataObserver$ = of(this.arr).pipe(concatMap(item => of(item).pipe(delay(1000))));
+  //   this.dataObserver$.subscribe(z => {
+  //     // console.log(z)
+  //     this.totalData = z;
+  //     if (z) {
+  //       this.loader = false;
+  //     }
+  //     this.totalClosedData = z.filter(item => {
+  //       return item.Status == "CLOSED";
+  //     })
+  //     this.totalunClosedData = z.filter(item => {
+  //       return item.Status != "CLOSED";
+  //     })
+  //     this.totalResolvedData = z.filter(item => {
 
-        return item["Resolved Status"] == "Resolved";
-      })
-      const loc = z.map(item => {
-        return item["Location"];
-      })
-      this.totalLoc = [...new Set(loc)].map(z => z);
+  //       return item["Resolved Status"] == "Resolved";
+  //     })
+  //     const loc = z.map(item => {
+  //       return item["Location"];
+  //     })
+  //     this.totalLoc = [...new Set(loc)].map(z => z);
 
-      // get all catg of TAGS starts
-      const tagKey = "Tag";
-      const uniq = z.map(item => {
-        return item[tagKey];
-      })
-      // console.log('uniq', uniq)
-      const totalCategory = [...new Set(uniq)].map(z => z);///get total tags with uniq
-      this.totalCategory = [];
-      for (let a of totalCategory) {
-        // reform tags
-        let item: any = {};
-        item.key = a;
-        item.count = 0;
-        const newArr = this.totalData.filter((obj: any) => {
-          return obj[tagKey] == a;
-        })
-        if (newArr.length > 0) {
-          item.count = newArr.length;
+  //     // get all catg of TAGS starts
+  //     const tagKey = "Tag";
+  //     const uniq = z.map(item => {
+  //       return item[tagKey];
+  //     })
+  //     // console.log('uniq', uniq)
+  //     const totalCategory = [...new Set(uniq)].map(z => z);///get total tags with uniq
+  //     this.totalCategory = [];
+  //     for (let a of totalCategory) {
+  //       // reform tags
+  //       let item: any = {};
+  //       item.key = a;
+  //       item.count = 0;
+  //       const newArr = this.totalData.filter((obj: any) => {
+  //         return obj[tagKey] == a;
+  //       })
+  //       if (newArr.length > 0) {
+  //         item.count = newArr.length;
 
-        }
-        this.totalCategory.push(item)
-      }
-      this.newLabel = "Tags vs Tags count";
-      // get all catg of TAGS ends
+  //       }
+  //       this.totalCategory.push(item)
+  //     }
+  //     this.newLabel = "Tags vs Tags count";
+  //     // get all catg of TAGS ends
 
-      // word cloud starts
+  //     // word cloud starts
 
-      // this.data = [
-      //   { text: 'Web App', weight: 1, position: { left: 2, top: 50 } },
-      //   { text: 'Test Cases', weight: 2 },
-      //   { text: 'Approval Pending', weight: 3, position: { left: 12, top: 60 } },
-      //   { text: 'Result Weight', weight: 5 },
-      //   { text: 'Big data', color: 'red', weight: 6, position: { left: 2, top: 110 } },
-      //   { text: 'Mail Request', weight: 2 },
-      //   { text: 'Output:Success', weight: 3, position: { left: 514, top: 130 } },
-      //   { text: 'Analysis', weight: 1 },
-      //   { text: 'Random View', color: 'white', weight: 2, position: { left: 6, top: 15 } },
+  //     // this.data = [
+  //     //   { text: 'Web App', weight: 1, position: { left: 2, top: 50 } },
+  //     //   { text: 'Test Cases', weight: 2 },
+  //     //   { text: 'Approval Pending', weight: 3, position: { left: 12, top: 60 } },
+  //     //   { text: 'Result Weight', weight: 5 },
+  //     //   { text: 'Big data', color: 'red', weight: 6, position: { left: 2, top: 110 } },
+  //     //   { text: 'Mail Request', weight: 2 },
+  //     //   { text: 'Output:Success', weight: 3, position: { left: 514, top: 130 } },
+  //     //   { text: 'Analysis', weight: 1 },
+  //     //   { text: 'Random View', color: 'white', weight: 2, position: { left: 6, top: 15 } },
 
-      // ];
-      // const data =   this.totalData.filter((item: any) => {        
-      //   return item.Tag;
-      // }).map((result:any)=>{
-      //   return {
-      //     text: result.Tag, weight: 2
-      //     ,
-      //     position: { left: 2, top: 50 } 
-      //   }
-      // })
+  //     // ];
+  //     // const data =   this.totalData.filter((item: any) => {        
+  //     //   return item.Tag;
+  //     // }).map((result:any)=>{
+  //     //   return {
+  //     //     text: result.Tag, weight: 2
+  //     //     ,
+  //     //     position: { left: 2, top: 50 } 
+  //     //   }
+  //     // })
 
-      const myArray = this.totalData;
-      if (this.totalCategory.length > 0) {
-
-
-        this.data = this.totalCategory.map((item: any) => {
-          return {
-            text: item.key, weight: item.count
-          }
-        });
-      }
-      from(myArray).pipe(concatMap((item) => of(item).pipe(delay(1000))))
-        .subscribe((timedItem: any) => {
-          console.log(timedItem);
-          // this.data.push({
-
-          //   text: timedItem.Tag, weight: 2
-          //   ,
-          //   position: { left: 2, top: 50 }
-
-          // })
-          console.log(this.data)
-        });
+  //     const myArray = this.totalData;
+  //     if (this.totalCategory.length > 0) {
 
 
+  //       this.data = this.totalCategory.map((item: any) => {
+  //         return {
+  //           text: item.key, weight: item.count
+  //         }
+  //       });
+  //     }
+  //     from(myArray).pipe(concatMap((item) => of(item).pipe(delay(1000))))
+  //       .subscribe((timedItem: any) => {
+  //         console.log(timedItem);
+  //         // this.data.push({
 
-      // word cloud ends
+  //         //   text: timedItem.Tag, weight: 2
+  //         //   ,
+  //         //   position: { left: 2, top: 50 }
+
+  //         // })
+  //         console.log(this.data)
+  //       });
 
 
-    })
+
+  //     // word cloud ends
+
+
+  //   })
+
+  // }
+  log(eventType: string, e?: any) {
+    // console.log(eventType, e);
+  }
+
+  getPriorityFilter(e: any) {
+    if (e) {
+      this.loading = true;
+      this.TrendAnalysis.Priority = [];
+      this.startPriority(new Date(e.START_DATE), new Date(e.END_DATE));
+    }
 
   }
-  log(eventType: string, e?: any) {
-    console.log(eventType, e);
+  getFilter(e: any) {
+    // console.log(e)
+    if (e) {
+      this.loading = true;
+
+      this.newMTTRList = [];
+
+      this.loadData(new Date(e.START_DATE), new Date(e.END_DATE));
+      const arr = this.api.getTicketsByDateWise(e, Object.values(this.overAllData[0].Resolved));
+      // console.log(arr)
+      // this.loading = false;
+
+
+
+    }
   }
 }
 
 function n(n: any) {
   throw new Error('Function not implemented.');
 }
+
+function ele(ele: any, any: any) {
+  throw new Error('Function not implemented.');
+}
+

@@ -1,55 +1,51 @@
-<h2 mat-dialog-title>Filter By</h2>
-<mat-dialog-content color="light" class="mat-typography">
+<h2 mat-dialog-title style="color:#444">Filter By</h2>
 
-    <form [formGroup]="myForm" class="example-form">
-        <mat-form-field class="example-full-width" appearance="fill">
+<div class="myform">
+  <form [formGroup]="newForm" class="example-form">
+    <div class="row">
+      <div class="col-md-3">
+        <mat-form-field color="primary" class="example-full-width" appearance="outline">
           <mat-label>Start Date</mat-label>
-          <!-- <input matInput type="datetime-local" placeholder="" > -->
-          <input matInput [matDatepicker]="picker" placeholder="Choose a date">
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-datepicker #picker></mat-datepicker>
+          <input matInput type="date" formControlName="START_DATE"  placeholder="Choose a date">
+          <!-- <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker> -->
         </mat-form-field>
-      
-        <!-- <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>End Date</mat-label>
-            <input matInput type="datetime-local" placeholder="" >
-        </mat-form-field> -->
+      </div>
 
-        <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>End Date</mat-label>
+      <div class="col-md-3">
+        <mat-form-field class="example-full-width" appearance="outline">
+          <mat-label>End Date</mat-label>
 
-            <input matInput [matDatepicker]="picker2" placeholder="Choose a date">
-            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-            <mat-datepicker #picker2></mat-datepicker>
-          </mat-form-field>
-          
+          <input matInput type="date" formControlName="END_DATE"  placeholder="Choose a date">
+          <!-- <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker> -->
+        </mat-form-field>
+      </div>
 
-        <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>Category</mat-label>
-            <mat-select formControlName="toppings" multiple>
-              <mat-select-trigger>
-              
-              </mat-select-trigger>
-              <mat-option *ngFor="let item of data.totalCategory" [value]="item.key">{{item.key}}</mat-option>
-            </mat-select>
-          </mat-form-field>
+      <div class="col-md-3">
 
-          <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>Location</mat-label>
-            <mat-select formControlName="toppings" multiple>
-              <mat-select-trigger>
-              
-              </mat-select-trigger>
-              <mat-option *ngFor="let item of data.totalLoc" [value]="item">{{item}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-          
-      </form>
-      
-</mat-dialog-content>
-<mat-dialog-actions align="end">
+        <mat-form-field *ngIf="widget=='heat'" class="example-full-width" appearance="outline">
+          <mat-label>Select</mat-label>
+          <mat-select formControlName="heatMapFilterBy" multiple="false">
+            <mat-select-trigger>
+
+            </mat-select-trigger>
+            <mat-option *ngFor="let item of FilterBy" [value]="item.key">
+              {{item.key}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="col-md-3">
+        <button [disabled]="!newForm.valid" mat-raised-button (click)="onConfirmClick()">Search</button>
+      </div>
+    </div>
+
+
+  </form>
+</div>
+
+
+<!-- <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close (click)="cancel()">Cancel</button>
   <button [disabled]="!myForm.valid" mat-button (click)="onConfirmClick()" [mat-dialog-close]="true" cdkFocusInitial>Search</button>
-</mat-dialog-actions>
-
-
+</mat-dialog-actions> -->

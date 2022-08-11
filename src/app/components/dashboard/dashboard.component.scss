@@ -1,5 +1,5 @@
 .dashboard-content{
-    padding: 2em;
+    padding: 2em;    background: #f3f3f3
 }
 .mat-dialog-container ,.backdropBackground {
     background: #fff !important;
@@ -22,9 +22,32 @@
 .result1{
     background-color: #fff;
 }
+.card1,.card2,.card3,.card4{
+    // box-shadow: 0 2px 4px #000;
+    box-shadow: 3px 5px 11px #444;
+}
+.card1{
+    background:linear-gradient(100deg, #ff197d, #cc1464);
+    
+}
+.card2{
+    background:linear-gradient(100deg, #2DD63F,#1E982B);    
+}
+.card3{
+    background:linear-gradient(100deg, #FFA500,#cc8400);    
+    
+}
+.card4{
+    background:linear-gradient(100deg, #417de2,#3464b4);    
+    
+}
+
+
+
 .result2{
-    background: linear-gradient(45deg, #b0cbf8, #f1f6fd    );
-    box-shadow: 0 2px 4px #444;
+    background:#fff;
+    // background: linear-gradient(45deg, #e6dbfe, #f2edfe    );
+    box-shadow: 0 3px 10px #864efc;
 }
 .result3{
     background: linear-gradient(45deg, #fff, #f1f6fd    );
@@ -41,10 +64,10 @@
     top: -70px;
     display: flex;
     justify-content: center;    align-items: center;
-    box-shadow: 0 1px 2px #000;
+    // box-shadow: 0 1px 2px #000;
 }
 .abs1,.abs2,.abs3,.abs4{
-    background-color:#b0cbf8 !important;
+    background-color:#ddd !important;
 }
 .abs1{
     background-color: orange;
@@ -68,13 +91,18 @@ color:#fff;
 .result1 mat-card-subtitle{
     color:#24244e;
 }
+.card1 mat-card-subtitle,.card2 mat-card-subtitle,.card3 mat-card-subtitle,.card4 mat-card-subtitle{
+    // font-weight: 500;
+    text-shadow: 0 1px 1px #000;
+    color: #fff;
+}
 mat-card-content,mat-card-subtitle{
     text-align: right;
     text-transform: uppercase;
 }
 mat-card-content{
     font-size: 2em;
-    color:#444;font-weight:300;
+    color:#fff;    text-shadow: 0 5px 5px #000;
     
 }
 .result1 mat-card-content mat-icon{
@@ -92,8 +120,10 @@ mat-card-content{
     top:110px;right: 2px;
 }
 .wordCloud{
-    background-color: #6387c3;
-}
+    background-color: #864EFC;
+    box-shadow: 0 3px 10px #864efc !important;
+} 
 .heatCnt{
-    background-color: #e4edfc;
+    background-color:#fff;
+    box-shadow: 0 3px 10px #864efc !important;
 }

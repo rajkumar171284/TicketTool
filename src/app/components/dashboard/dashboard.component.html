@@ -5,13 +5,13 @@
 
     </div>
 
-    <div class="floating">
+    <!-- <div class="floating">
         <button mat-fab mat-button (click)="openDialog()">
             <mat-icon>filter_list</mat-icon>
 
         </button>
 
-    </div>
+    </div> -->
     <div class="row">
 
         <div class="col-md-12 dashboard-content">
@@ -31,7 +31,7 @@
             <div class="row">
 
                 <div class="col-md-3">
-                    <mat-card class="result1">
+                    <mat-card class="card1">
 
                         <mat-card-subtitle>TOTAL Tickets</mat-card-subtitle>
                         <mat-card-content>
@@ -39,8 +39,8 @@
                                 <mat-icon>av_timer</mat-icon>
 
                             </div>
-                            {{totalData.length}}
-                            <mat-icon style="color:#ddd">bookmark_border</mat-icon>
+                            {{jsonResponse.length>0?jsonResponse[0].TotalTickts:0}}
+                            <!-- <mat-icon style="color:#ddd">bookmark_border</mat-icon> -->
 
                         </mat-card-content>
 
@@ -50,7 +50,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <mat-card class="result1">
+                    <mat-card class="card2">
 
                         <mat-card-subtitle>Number of Months</mat-card-subtitle>
                         <mat-card-content>
@@ -58,8 +58,8 @@
                                 <mat-icon>notifications_none</mat-icon>
 
                             </div>
-                            {{totalClosedData.length}}
-                            <mat-icon style="color:green">arrow_upward</mat-icon>
+                            {{jsonResponse.length>0?jsonResponse[0].totalMonths:0}}
+                            <!-- <mat-icon style="color:green">arrow_upward</mat-icon> -->
 
                         </mat-card-content>
 
@@ -68,7 +68,7 @@
                 </div>
 
                 <div class="col-md-3">
-                    <mat-card class="result1">
+                    <mat-card class="card3">
 
                         <mat-card-subtitle>Total Service Requests</mat-card-subtitle>
                         <mat-card-content>
@@ -76,8 +76,9 @@
                                 <mat-icon>library_books</mat-icon>
 
                             </div>
-                            {{totalunClosedData.length}}
-                            <mat-icon style="color:#ddd">change_history</mat-icon>
+                            {{jsonResponse.length>0?jsonResponse[0].totalServReq:0}}
+                            <!-- <mat-icon style="color:#ddd">
+                                change_history</mat-icon> -->
 
                         </mat-card-content>
 
@@ -85,7 +86,7 @@
                     </mat-card>
                 </div>
                 <div class="col-md-3">
-                    <mat-card class="result1">
+                    <mat-card class="card4">
 
                         <mat-card-subtitle>Total Incident </mat-card-subtitle>
                         <mat-card-content>
@@ -93,9 +94,10 @@
                                 <mat-icon>list_alt</mat-icon>
 
                             </div>
-                            
+
+
                             {{totalResolvedData.length}}
-                            <mat-icon style="color:red">arrow_downward</mat-icon>
+                            <!-- <mat-icon style="color:red">arrow_downward</mat-icon> -->
 
                         </mat-card-content>
 
@@ -111,70 +113,103 @@
                 <div class="col-md-12 ">
                     <mat-card class=" mt-4 mb-3 wordCloud">
 
-                        <angular-tag-cloud (clicked)="log('clicked', $event)" [data]="data" [width]="options.width" [height]="options.height"
-                            [overflow]="options.overflow"  [zoomOnHover]="options.zoomOnHover" [realignOnResize]="options.realignOnResize">
+                        <angular-tag-cloud (clicked)="log('clicked', $event)" [data]="data" [width]="options.width"
+                            [height]="options.height" [overflow]="options.overflow" [zoomOnHover]="options.zoomOnHover"
+                            [realignOnResize]="options.realignOnResize">
                         </angular-tag-cloud>
                     </mat-card>
                 </div>
 
-                <div class="col-md-12 ">
-                    <!-- <app-heatmap-plotly pMap="scatter2"></app-heatmap-plotly> -->
-                    <!-- <app-chartjs [monthsData2]="monthsData2" chartType="chart2"></app-chartjs> -->
 
-                </div>
             </div>
 
-            <!-- <div class="row ">
+            <!-- -->
 
+
+            <div class="row ">
+                <!-- tag vs tag count -->
                 <div class="col-md-12">
-                    <mat-card class="result2 mt-4 mb-3">
-                        <app-leaflet ></app-leaflet>
+                    <mat-card *ngIf="newMTTRList.length>0" class="result2 mt-4 mb-3">
+                        <app-filter-dialog [pattern]="'tags'" [startDate]="dateFrom" [endDate]="dateTo" (_getFilter)="getFilter($event)"
+                            [widget]="'tags'">
+
+                        </app-filter-dialog>
+                        <app-plotly [loader]="loading" [totalCategory]="newMTTRList" [newLabel]="newLabel"
+                            pMap="tag-Bar"></app-plotly>
 
 
                     </mat-card>
                 </div>
 
-            </div> -->
+              
+            </div>
 
+
+
+            <div class="row">
+                <div class="col-md-12">
+
+                    <mat-card  class=" mt-4 mb-3 heatCnt">
+
+                        <app-filter-dialog [widget]="'heat'">
+
+                        </app-filter-dialog>
+                        <app-heatmap-plotly [zAxis]="TrendAnalysis.zAxis" [yAxis]="TrendAnalysis.yAxis"
+                            [xAxis]="TrendAnalysis.xAxis"></app-heatmap-plotly>
+                    </mat-card>
+
+                </div>
+
+            </div>
+
+            <!-- Priority vs Priority count -->
+            <div class="row ">
+
+                <div class="col-md-12">
+                    <mat-card class="result2 mt-4 mb-3">
+                        <app-filter-dialog [pattern]="'priority'" [startDate]="dateFrom" [endDate]="dateTo" (_priorityFilter)="getPriorityFilter($event)"
+                            [widget]="'tags'">
+
+                        </app-filter-dialog>
+                        <app-plotly [loader]="loading" [Priority]="TrendAnalysis.Priority"
+                            [newLabel]="TrendAnalysis.PriorityLabel" pMap="bar">
+
+                        </app-plotly>
+
+
+                    </mat-card>
+                </div>
+            </div>
+
+
+            <div class="row ">
+                <!-- tag vs tag count -->
+                <div class="col-md-12">
+                    <mat-card *ngIf="newMTTRList.length>0" class="result2 mt-4 mb-3">
+                        <!-- <app-filter-dialog [startDate]="dateFrom" [endDate]="dateTo" (_getFilter)="getFilter($event)"
+                            [widget]="'tags'">
+
+                        </app-filter-dialog> -->
+                        <app-plotly [loader]="loading" [totalCategory]="newMTTRList" [newLabel]="'MTTR analysis'"
+                            pMap="pie"></app-plotly>
+
+
+                    </mat-card>
+                </div>
+
+              
+            </div>
 
             <div class="row ">
 
                 <div class="col-md-12">
                     <mat-card class="result2 mt-4 mb-3">
-
-                        <!-- <app-chartjs [monthsData]="monthsData" chartType="chart1"></app-chartjs> -->
-                        <app-plotly [totalCategory]="totalCategory" [newLabel]="newLabel" pMap="scatter2"></app-plotly>
+                        <app-leaflet></app-leaflet>
 
 
                     </mat-card>
                 </div>
 
-                <!-- <div class="col-md-6 ">
-                    <mat-card class="result3 mt-4 mb-3">
-                        <app-plotly pMap="line"></app-plotly>
-                        
-                    </mat-card>
-                </div> -->
-            </div>
-
-
-            <!-- -->
-
-           
-
-
-            <div class="row">
-                <div class="col-md-12">
-                    <mat-card class=" mt-4 mb-3 heatCnt">
-                        <app-heatmap-plotly pMap="scatter2"></app-heatmap-plotly>
-                        <!-- <app-plotly pMap="heat"></app-plotly> -->
-                    </mat-card>
-
-                </div>
-                <!-- <div class="col-md-4">
-                    <app-plotly pMap="heat"></app-plotly>
-
-                </div> -->
             </div>
 
         </div>

@@ -2,6 +2,16 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/cor
 import * as Plotly from 'plotly.js-dist-min';
 import { Config, Data, Layout } from 'plotly.js';
 import { Subject, BehaviorSubject } from 'rxjs';
+import { ThemePalette } from '@angular/material/core';
+import { ProgressSpinnerMode } from '@angular/material/progress-spinner';
+
+const colors = ["(255,165,0)", "(255,105,180)", "(124,252,0)", "(0,128,0)", "(100,149,237)", "(64,224,208)", "(0,255,127)",
+  "(138,43,226)", "(153,50,204)", "(255,105,180)", "(0,191,255)", "(255,105,180)", "(210,105,30)", "(148,0,211)", "(65,105,225)", "(100,149,237)", "(255,105,180)", "(72,209,204)", "(0,128,128)"]
+
+const colors2 = ['#CDDC39', '#6666FF', '#F44336', '#00BCD4'];
+// ['#607D8B','#673AB7','#ff3eeb','#5cca33',
+//           '#123abc','#ffe800','#108b10','#778afd','#482b7d','#81e7e1']
+
 @Component({
   selector: 'app-plotly',
   templateUrl: './plotly.component.html',
@@ -11,23 +21,28 @@ export class PlotlyComponent implements OnInit, OnChanges {
   @Input('pMap') pMap: any;
   @Input() totalCategory!: any;
   @Input() newLabel!: any;
-  
+  @Input() loader!: boolean;
+
+  @Input() Priority!: any;
+
   public data: any;
   public layOut: any;
+  chartWidth = 520;
+  chartHeight = 520;
   graph = {
     data: [],
     layout: { width: 520, height: 340, title: 'Sample Plot' },
     pointIndex: 1
   };
 
-  graph1:any = {
+  graph1: any = {
     data: [
       { x: [1, 2, 3], y: [2, 3, 4], type: 'bar' },
     ],
-    layout: { title: this.newLabel}
+    layout: { title: this.newLabel }
   };
 
-  graph2:any = {
+  graph2: any = {
     data: [
       { x: [1, 2, 3, 4, 5], y: [1, 4, 9, 4, 1], type: 'scatter' },
       { x: [1, 2, 3, 4, 5], y: [1, 3, 6, 9, 6], type: 'scatter' },
@@ -35,7 +50,9 @@ export class PlotlyComponent implements OnInit, OnChanges {
     ],
     layout: { title: 'Some Data to Highlight' }
   };
-
+  color: ThemePalette = 'primary';
+  mode: ProgressSpinnerMode = 'indeterminate';
+  value = 50;
   interactivePlotSubject$: Subject<any> = new BehaviorSubject<any>(this.graph2.data);
 
   constructor() { }
@@ -44,83 +61,198 @@ export class PlotlyComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    // console.log(changes)
-    // console.log(this.totalCategory)
-    if (this.pMap === 'scatter2') {
-
+    console.log(changes, this.loader)
+    
+    if (this.pMap === 'tag-Bar') {
+      console.log(this.totalCategory)
       this.data = [
-        { x: this.totalCategory.map((z:any)=>z.key), 
-          y: this.totalCategory.map((z:any)=>z.count),
-           type: 'bar', marker: { color: '#6666ff' }, backgroundColor: 'red' }
+        {
+          x: this.totalCategory.map((z: any) => z.Tag),
+          y: this.totalCategory.map((z: any) => z.count),
+          type: 'bar',
+          // opacity: 0.6,
+          // name:[]
+          //  marker: { color: '#000000' },
+          marker: {
+            color: ['#CDDC39', '#6666FF', '#F44336', '#00BCD4', '#607D8B', '#673AB7', '#ff3eeb', '#5cca33',
+              '#123abc', '#ffe800', '#108b10', '#778afd', '#482b7d', '#81e7e1']
+          }
+          //  backgroundColor: 'red' 
+        }
+
 
       ]
 
-      this.layOut = {
-        width: 520, height: 340, title: 'Bar chart',
-        plot_bgcolor: "rgba(0,0,0,0)",
-        paper_bgcolor: "rgba(0,0,0,0)",
-        margin: {
-          l: 50,
-          r: 50,
-          b: 100,
-          t: 50,
-          pad: 4
-        },
-      
-      }
+      // this.layOut = {
+      //   width: 520, height: 340, title: 'Bar chart',
+      //   plot_bgcolor: "rgba(0,0,0,0)",
+      //   paper_bgcolor: "rgba(0,0,0,0)",
+
+
+      // }
       this.graph1.data = this.data;
-      this.graph1.layout.title=this.newLabel;
-      this.graph1.layout.margin= {
+      this.graph1.layout.title = this.newLabel;
+      this.graph1.layout.showlegend = false;
+      this.graph1.layout.margin = {
         l: 50,
         r: 50,
-        b: 250,
+        b: 100,
         t: 50,
         pad: 4
       }
+      this.loader = false;
 
-    } else
-      if (this.pMap === 'line') {
-        //   this.graph = {
-        //     data: [
-        //         { x: [1, 2, 3], y: [2, 6, 3], type: 'scatter', mode: 'lines+points', marker: {color: 'red'} },
-        //         { x: [1, 2, 3], y: [2, 5, 3], type: 'bar' },
-        //     ],
-        //     layout: {width: 520, height: 340, title: 'Sample Plot'}
-        // };
-        this.data = [
-          { x: [1, 2, 3, 4, 5, 6, 7, 8, 9], y: [2, 7, 6, 3], type: 'scatter', mode: 'lines+points', marker: { color: '#6666ff' } },
+    } else if (this.pMap === 'pie') {
+      this.pieChart(this.totalCategory)
 
-          { x: [1, 2, 3, 4, 5, 6, 7, 8, 9], y: [4, 12, 6, 9], type: 'scatter', mode: 'lines+points', marker: { color: 'orange' } },
+    } else if (this.Priority && this.pMap == 'bar') {
+      this.barChart(this.Priority)
+    }
+  }
 
-          { x: [1, 2, 3, 4, 5, 6, 7, 8, 9], y: [8, 2, 7, 9], type: 'scatter', mode: 'lines+points', marker: { color: 'green' } },
-        ]
-        // Plotly.newPlot('myDiv', data);
-        this.layOut = {
-          width: 520, height: 340, title: 'Line',
-          plot_bgcolor: "rgba(0,0,0,0)",
-          paper_bgcolor: "rgba(0,0,0,0)",
+  barChart(result: any) {
+    // priority
+    console.log('priority',result)
 
+    let data: any = [];
+
+    const dummy = [{ key: '3-Low', count: 60 },
+    { key: '2-Low', count: 102 },
+    { key: '1-Low', count: 30 }
+    ]
+
+    const newResult = result.concat(...dummy);
+    data = [
+      {
+        x: newResult.map((z: any) => z.key),
+        y: newResult.map((z: any) => z.count),
+        type: 'bar',
+        name: ['wew', 'wewe', 'ewewew', 'dsds'],
+        marker: {
+          // opacity: 0.6,
+          color: ['#CDDC39', '#6666FF', '#F44336', '#00BCD4', '#607D8B', '#673AB7', '#ff3eeb', '#5cca33',
+            '#123abc', '#ffe800', '#108b10', '#778afd', '#482b7d', '#81e7e1']
         }
-        this.graph.data = this.data;
-
-      } else {
-        this.data = [
-          {
-            z: [[1, 20, 30], [20, 1, 60], [30, 60, 1],
-
-            [11, 210, 130], [200, 111, 160], [130, 60, 11]
-            ],
-            type: 'heatmap'
-          }
-        ];
-        this.graph.data = this.data;
-        this.layOut = {
-          width: 820, height: 390, title: this.pMap,
-          plot_bgcolor: "rgba(0,0,0,0)",
-          paper_bgcolor: "rgba(0,0,0,0)",
-        }
-
+        //  backgroundColor: 'red' 
       }
+
+
+    ]
+
+    // let j = 0;
+    // for (let a of newResult) {
+    //   if (a) {
+    //     xArray.push(a.key);
+    //     yArray.push(a.count)
+    //     const newData = {
+    //       x: xArray,
+    //       y: yArray,
+    //       type: "bar",
+    //       name: a.key,
+    //       marker: {
+    //         color: colors2
+
+    //       }
+    //     }
+    //     data.push(newData);
+    //   }
+    //   // 
+    //   j++;
+    // }
+
+
+    this.graph1.data = data;
+    // this.graph1.layout.width = this.chartWidth;
+    // this.graph1.layout.height = this.chartHeight;
+    this.graph1.layout.showlegend = false;
+    this.graph1.responsive = true;
+    this.graph1.layout.margin = {
+      l: 50,
+      r: 50,
+      b: 100,
+      t: 50,
+      pad: 4
+    }
+    this.graph1.layout.title = this.newLabel;
+    // console.log(this.graph1)
+
+  }
+
+
+  pieChart(result: any) {
+
+    let data: any = [];
+    let labelArr: any = [];
+
+    let linedata: any = [];
+    let xArray: any = [];
+
+
+    result = result.map((z: any) => {
+      z.avg = (z.hours / z.count);
+      return z;
+    });
+
+    // y value
+    console.log(result)
+    for (let units of result) {
+      // format VALUE json as key & value
+      labelArr.push(units.Tag)
+      data.push(units.avg)
+
+      let trace = {
+        x: xArray,
+        // y: yArray, 
+        y: units.data,
+        mode: 'scatter+points',
+        type: 'pie',
+        // name: a.DEVICE_ID,
+        name: units.Tag
+      };
+      linedata.push(trace);
+
+    }
+
+
+    console.log('data', data)
+    console.log('labelArr', labelArr)
+    var traceA = {
+      type: "pie",
+      values: data,
+      labels: labelArr,
+      hole: 0.25,
+      pull: [0.1, 0, 0, 0, 0],
+      direction: 'clockwise',
+      marker: {
+        colors: ['#CDDC39', '#673AB7', '#F44336', '#00BCD4', '#607D8B'],
+        line: {
+          color: 'black',
+          width: 1
+        }
+      },
+      textfont: {
+        family: 'Lato',
+        color: 'white',
+        size: 14
+      },
+      hoverlabel: {
+        bgcolor: 'black',
+        bordercolor: 'black',
+        font: {
+          family: 'Lato',
+          color: 'white',
+          size: 14
+        }
+      }
+    };
+
+    this.data = [traceA];
+// console.log('pip',this.data)
+    this.graph1.data = this.data;
+    // this.graph1.layout.width = this.chartWidth;
+    // this.graph1.layout.height = this.chartHeight;
+    this.graph1.layout.title = this.newLabel;
+
   }
   // We'll bind the hover event from plotly
   hover(event: any): void {

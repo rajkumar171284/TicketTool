@@ -1,11 +1,35 @@
 .example-form {
-    min-width: 150px;
-    max-width: 500px;
+    // min-width: 150px;
+    // max-width: 500px;
     width: 100%;
   }
-  
-  .example-full-width {
+  .example-full-width{
     width: 100%;
-  }
+    // background-color: #fff;
+  } 
+  .example-full-width mat-label,.example-full-width {
  
-  
+    // background: ;
+    color:#444;
+  }
+  .example-full-width label{
+
+  }
+  .myform{
+    display: flex;
+    // border:1px solid #444
+  }
+  // ::ng-deep.mat-form-field-appearance-fill .mat-form-field-flex {
+  //   border-bottom: #BBB 1px solid;
+  //   background-color: transparent;}
+    
+  //   ::ng-deep.mat-form-field.mat-focused .mat-form-field-ripple {
+  //   background-color: rgb(51, 88, 155) !important;}
+    
+  //   ::ng-deep.mat-form-field:hover .mat-form-field-ripple {
+  //   background-color: rgb(51, 88, 155) !important;}
+ 
+  ::ng-deep.mat-form-field-appearance-outline .mat-form-field-outline {
+    /* background: red; */
+    color: #444 !important;
+}

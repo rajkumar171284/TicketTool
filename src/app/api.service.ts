@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
+import * as moment from 'moment'
 import { map } from 'rxjs/operators';
 import * as XLSX from 'xlsx';
 import { Subscription, Observable, of, from, concatMap } from 'rxjs';
@@ -16,6 +16,35 @@ export class ApiService {
     return this.http.get('assets/cities.json').pipe(map((response: any) => {
       return response;
     }));
+  }
+  getTickets(): Observable<any> {
+    return this.http.get('assets/result.json').pipe(map((response: any) => {
+      return response;
+    }));
+  }
+  getTicketsByDateWise(req: any, currArray: any) {
+    let arr:any=[];
+    const index = currArray.filter((ele: any) => {
+      var date = new Date(ele);    
+      const start=new Date(req.START_DATE);
+      const end =new Date(req.END_DATE);
+      // console.log(date,start,end) 
+      return (date >=start  && date <= end);
+    })
+
+    return index;
+
+    // const index = currArray.findIndex((ele: any) => {
+    //   var date = new Date(ele);
+    //   const start = new Date(req.START_DATE);
+    //   const end = new Date(req.END_DATE);
+    //   // console.log(date,start,end) 
+    //   return (date >= start && date <= end);
+    // })
+    // if (index != -1) {
+    //   arr.push[index]
+    // }
+    // return arr;
   }
 
   getSampleTicket(): Observable<any> {
@@ -36,6 +65,15 @@ export class ApiService {
     return this.http.get('assets/test-data2.xlsx', { responseType: 'arraybuffer' as 'json', headers: { 'Content-Type': 'application/json' } }).pipe(map((response: any) => response));
   }
 
+  diff_hours(dt2:Date, dt1:Date) 
+  {
+ 
+   var diff =(dt2.getTime() - dt1.getTime()) / 1000;
+   diff /= (60 * 60);
+   return Math.abs(Math.round(diff));
+   
+  }
+
   async getDatafromCSV(): Promise<Observable<any>> {
     let arr: any = [];
     let url = 'assets/test-data2.xlsx';
@@ -46,7 +84,20 @@ export class ApiService {
     const worksheet = workbook.Sheets[firstSheetName];
     const sheetValues = XLSX.utils.sheet_to_json(worksheet);
 
-    const groupByCategory = sheetValues.reduce((group, product) => {
+    const groupByCategory = sheetValues.reduce((group, product: any) => {
+      if (product["Created Date"]) {
+        const str = product["Created Date"];
+
+        //         const record_date = Date.parse(str)
+        // let days:any = Math.round((record_date - new Date(1899, 11, 30)) / 8.64e7);
+        // const newrecord_date = parseInt((days).toFixed(10));
+
+        const newstr = new String(str).split('.').join("");
+        const newNum = parseInt(newstr)
+        const newdate = new Date(newNum).toISOString();
+        // product.CreatedDate=newdate
+        product.CreatedDate = moment(newdate).format("DD-MM-YY HH:mm:ss");
+      }
       arr.push(product)
     })
     return arr;
