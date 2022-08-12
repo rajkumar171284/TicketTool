@@ -24,13 +24,13 @@ import { LeafletComponent } from './components/leaflet/leaflet.component';
 import { ApiService } from './api.service';
 import { HeatmapPlotlyComponent } from './components/heatmap-plotly/heatmap-plotly.component';
 import { SidenavModule } from './sidenav/sidenav.module';
-// import { GoogleChartsModule } from 'angular-google-charts';
+import { UploadComponent } from './components/upload/upload.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 
 @NgModule({
   declarations: [
     AppComponent, DashboardComponent, ChartjsComponent, FilterDialogComponent,
-    PlotlyComponent, LeafletComponent, HeatmapPlotlyComponent,
+    PlotlyComponent, LeafletComponent, HeatmapPlotlyComponent,UploadComponent
   ],
   imports: [
     BrowserModule,

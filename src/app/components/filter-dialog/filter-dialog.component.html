@@ -24,7 +24,7 @@
 
       <div class="col-md-3">
 
-        <mat-form-field *ngIf="widget=='heat'" class="example-full-width" appearance="outline">
+        <mat-form-field *ngIf="widget=='heat-trend'" class="example-full-width" appearance="outline">
           <mat-label>Select</mat-label>
           <mat-select formControlName="heatMapFilterBy" multiple="false">
             <mat-select-trigger>
@@ -36,7 +36,7 @@
         </mat-form-field>
       </div>
       <div class="col-md-3">
-        <button [disabled]="!newForm.valid" mat-raised-button (click)="onConfirmClick()">Search</button>
+        <button  mat-raised-button (click)="onConfirmClick()">Search</button>
       </div>
     </div>
 

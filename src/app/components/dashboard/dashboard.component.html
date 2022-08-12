@@ -55,7 +55,7 @@
                         <mat-card-subtitle>Number of Months</mat-card-subtitle>
                         <mat-card-content>
                             <div class="abs-content abs2">
-                                <mat-icon>notifications_none</mat-icon>
+                                <mat-icon>date_range</mat-icon>
 
                             </div>
                             {{jsonResponse.length>0?jsonResponse[0].totalMonths:0}}
@@ -95,8 +95,8 @@
 
                             </div>
 
-
-                            {{totalResolvedData.length}}
+                            {{jsonResponse.length>0?jsonResponse[0].totalIncident:0}}
+                        
                             <!-- <mat-icon style="color:red">arrow_downward</mat-icon> -->
 
                         </mat-card-content>
@@ -129,8 +129,8 @@
             <div class="row ">
                 <!-- tag vs tag count -->
                 <div class="col-md-12">
-                    <mat-card *ngIf="newMTTRList.length>0" class="result2 mt-4 mb-3">
-                        <app-filter-dialog [pattern]="'tags'" [startDate]="dateFrom" [endDate]="dateTo" (_getFilter)="getFilter($event)"
+                    <mat-card  class="result2 mt-4 mb-3">
+                        <app-filter-dialog  [startDate]="dateFrom" [endDate]="dateTo" (_getFilter)="getFilter($event)"
                             [widget]="'tags'">
 
                         </app-filter-dialog>
@@ -151,7 +151,7 @@
 
                     <mat-card  class=" mt-4 mb-3 heatCnt">
 
-                        <app-filter-dialog [widget]="'heat'">
+                        <app-filter-dialog (_TrendFilter)="TrendFilter($event)" [widget]="'heat-trend'">
 
                         </app-filter-dialog>
                         <app-heatmap-plotly [zAxis]="TrendAnalysis.zAxis" [yAxis]="TrendAnalysis.yAxis"
@@ -167,8 +167,8 @@
 
                 <div class="col-md-12">
                     <mat-card class="result2 mt-4 mb-3">
-                        <app-filter-dialog [pattern]="'priority'" [startDate]="dateFrom" [endDate]="dateTo" (_priorityFilter)="getPriorityFilter($event)"
-                            [widget]="'tags'">
+                        <app-filter-dialog [startDate]="dateFrom" [endDate]="dateTo" (_priorityFilter)="getPriorityFilter($event)"
+                            [widget]="'priority'">
 
                         </app-filter-dialog>
                         <app-plotly [loader]="loading" [Priority]="TrendAnalysis.Priority"

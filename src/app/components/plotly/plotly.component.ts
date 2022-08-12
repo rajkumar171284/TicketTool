@@ -28,7 +28,7 @@ export class PlotlyComponent implements OnInit, OnChanges {
   public data: any;
   public layOut: any;
   chartWidth = 520;
-  chartHeight = 520;
+  chartHeight = 320;
   graph = {
     data: [],
     layout: { width: 520, height: 340, title: 'Sample Plot' },
@@ -39,7 +39,13 @@ export class PlotlyComponent implements OnInit, OnChanges {
     data: [
       { x: [1, 2, 3], y: [2, 3, 4], type: 'bar' },
     ],
-    layout: { title: this.newLabel }
+    layout: { title: this.newLabel ,
+      font: {
+        family: 'Roboto',
+        // size: 14,
+        color: '#7f7f7f'
+      }
+    }
   };
 
   graph2: any = {
@@ -55,6 +61,8 @@ export class PlotlyComponent implements OnInit, OnChanges {
   value = 50;
   interactivePlotSubject$: Subject<any> = new BehaviorSubject<any>(this.graph2.data);
 
+
+  opacity:number=0.7;
   constructor() { }
 
   ngOnInit(): void {
@@ -64,13 +72,13 @@ export class PlotlyComponent implements OnInit, OnChanges {
     console.log(changes, this.loader)
     
     if (this.pMap === 'tag-Bar') {
-      console.log(this.totalCategory)
+      // console.log(this.totalCategory)
       this.data = [
         {
           x: this.totalCategory.map((z: any) => z.Tag),
           y: this.totalCategory.map((z: any) => z.count),
           type: 'bar',
-          // opacity: 0.6,
+          opacity: this.opacity,
           // name:[]
           //  marker: { color: '#000000' },
           marker: {
@@ -93,6 +101,8 @@ export class PlotlyComponent implements OnInit, OnChanges {
       this.graph1.data = this.data;
       this.graph1.layout.title = this.newLabel;
       this.graph1.layout.showlegend = false;
+      this.graph1.layout.height = this.chartHeight;
+
       this.graph1.layout.margin = {
         l: 50,
         r: 50,
@@ -112,7 +122,7 @@ export class PlotlyComponent implements OnInit, OnChanges {
 
   barChart(result: any) {
     // priority
-    console.log('priority',result)
+    // console.log('priority',result)
 
     let data: any = [];
 
@@ -129,41 +139,16 @@ export class PlotlyComponent implements OnInit, OnChanges {
         type: 'bar',
         name: ['wew', 'wewe', 'ewewew', 'dsds'],
         marker: {
-          // opacity: 0.6,
+          opacity: this.opacity,
           color: ['#CDDC39', '#6666FF', '#F44336', '#00BCD4', '#607D8B', '#673AB7', '#ff3eeb', '#5cca33',
             '#123abc', '#ffe800', '#108b10', '#778afd', '#482b7d', '#81e7e1']
         }
         //  backgroundColor: 'red' 
       }
-
-
     ]
-
-    // let j = 0;
-    // for (let a of newResult) {
-    //   if (a) {
-    //     xArray.push(a.key);
-    //     yArray.push(a.count)
-    //     const newData = {
-    //       x: xArray,
-    //       y: yArray,
-    //       type: "bar",
-    //       name: a.key,
-    //       marker: {
-    //         color: colors2
-
-    //       }
-    //     }
-    //     data.push(newData);
-    //   }
-    //   // 
-    //   j++;
-    // }
-
-
     this.graph1.data = data;
     // this.graph1.layout.width = this.chartWidth;
-    // this.graph1.layout.height = this.chartHeight;
+    this.graph1.layout.height = this.chartHeight;
     this.graph1.layout.showlegend = false;
     this.graph1.responsive = true;
     this.graph1.layout.margin = {
@@ -183,43 +168,27 @@ export class PlotlyComponent implements OnInit, OnChanges {
 
     let data: any = [];
     let labelArr: any = [];
-
-    let linedata: any = [];
-    let xArray: any = [];
-
-
     result = result.map((z: any) => {
       z.avg = (z.hours / z.count);
       return z;
     });
 
     // y value
-    console.log(result)
+    // console.log(result)
     for (let units of result) {
       // format VALUE json as key & value
       labelArr.push(units.Tag)
       data.push(units.avg)
 
-      let trace = {
-        x: xArray,
-        // y: yArray, 
-        y: units.data,
-        mode: 'scatter+points',
-        type: 'pie',
-        // name: a.DEVICE_ID,
-        name: units.Tag
-      };
-      linedata.push(trace);
-
     }
 
 
-    console.log('data', data)
-    console.log('labelArr', labelArr)
+    // console.log('data', data)
+    // console.log('labelArr', labelArr)
     var traceA = {
       type: "pie",
-      values: data,
-      labels: labelArr,
+      values: result.map((z:any)=>z.avg),
+      labels: result.map((z:any)=>z.Tag),
       hole: 0.25,
       pull: [0.1, 0, 0, 0, 0],
       direction: 'clockwise',
@@ -250,7 +219,7 @@ export class PlotlyComponent implements OnInit, OnChanges {
 // console.log('pip',this.data)
     this.graph1.data = this.data;
     // this.graph1.layout.width = this.chartWidth;
-    // this.graph1.layout.height = this.chartHeight;
+    this.graph1.layout.height = 400;
     this.graph1.layout.title = this.newLabel;
 
   }
@@ -258,14 +227,14 @@ export class PlotlyComponent implements OnInit, OnChanges {
   hover(event: any): void {
     // The hover event has a lot of information about cursor location.
     // The bar the user is hovering over is in "pointIndex"
-    console.log(event)
-    this.interactivePlotSubject$.next(
-      [this.graph2.data[event.points[0].pointIndex]]
-    );
+    // console.log(event)
+    // this.interactivePlotSubject$.next(
+    //   [this.graph2.data[event.points[0].pointIndex]]
+    // );
   }
   // Reset to default when hovering stops
   mouseLeave(event: Event): void {
-    this.interactivePlotSubject$.next(this.graph2.data);
+    // this.interactivePlotSubject$.next(this.graph2.data);
   }
 
 }

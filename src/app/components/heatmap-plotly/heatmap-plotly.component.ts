@@ -10,11 +10,12 @@ import * as moment from 'moment';
   styleUrls: ['./heatmap-plotly.component.scss']
 })
 export class HeatmapPlotlyComponent implements OnInit, OnChanges {
-  graph: any = { data: [] };
+  graph: any = { data: [],layout:{} };
   @Input('pMap') pMap: any;
   @Input() xAxis: any = [];
   @Input() yAxis: any = [];
   @Input() zAxis: any = [];
+  chartHeight = 320;
 
   constructor() { }
 
@@ -28,18 +29,7 @@ export class HeatmapPlotlyComponent implements OnInit, OnChanges {
     const yAxis=this.yAxis.map((d:any)=>moment(new Date(d)).format("yyyy-MM-dd"));
     // console.log(yAxis)
     const uniqYaxis=[...new Set(yAxis)].map((d:any)=>d);
-    // const uniqdates= uniqYaxis.map((ele:any)=>{      
-    //   // console.log(ele)      
-    //   return new Date(ele)
-
-    //   // return moment(ele).format("DD-MM-YYYY HH:mm:ss")
-    // })
-    // const uniqYaxis=[...new Set(this.yAxis)].map((d:any)=>new Date(d));
-
-// console.log(uniqYaxis)
-
-    // const val = Object.values(all_dates).map((z: any) => moment(z).format("DD-MM-YYYY"));
-    // console.log(this.yAxis)
+   
 
     let zarr: any = []
     this.zAxis.forEach((ele: any) => {
@@ -50,7 +40,7 @@ export class HeatmapPlotlyComponent implements OnInit, OnChanges {
     })
     // console.log(zarr)
 
-console.log('tags wih occourance',  this.zAxis)
+// console.log('tags wih occourance',  this.zAxis)
     
     let data = [
       {
@@ -59,20 +49,43 @@ console.log('tags wih occourance',  this.zAxis)
         z: zarr,
         type: 'heatmap',
         // colorscale:[[0, 'whitesmoke'], [0.33, 'limegreen'], [0.67, 'tomato'], [1, 'teal']]
-        colorscale: [[1, 'whitesmoke'], [3, 'limegreen'], [6, '#674ea7'], [12, 'red']],
+        // colorscale: [[1, 'whitesmoke'], [3, 'limegreen'], [6, '#674ea7'], [12, 'red']],
+        // colorscale: [
+        //   ['0.0', 'rgb(165,0,38)'],
+        //   ['0.111111111111', 'rgb(215,48,39)'],
+        //   ['0.222222222222', 'rgb(244,109,67)'],
+        //   ['0.333333333333', 'rgb(253,174,97)'],
+        //   ['0.444444444444', 'rgb(254,224,144)'],
+        //   ['0.555555555556', 'rgb(224,243,248)'],
+        //   ['0.666666666667', 'rgb(171,217,233)'],
+        //   ['0.777777777778', 'rgb(116,173,209)'],
+        //   ['0.888888888889', 'rgb(69,117,180)'],
+        //   ['1.0', 'rgb(49,54,149)']
+        // ],
+        colorscale: [[0, 'rgb(166,206,227)'], [0.25, 'rgb(31,120,180)'], [0.45, 'rgb(178,223,138)'], [0.65, 'rgb(51,160,44)'], [0.85, 'rgb(251,154,153)'], [1, 'rgb(227,26,28)']],
         xgap: 1, ygap: 1, opacity: 1,
-        showscale: true, zsmooth: false,
+        showscale: true, zsmooth: true,
         //  hoverinfo: "text", 
       }
     ];
     // console.log(data[0].y)
     // console.log(data[0].z)
     this.graph.data = data;
-    let layOut = {
-      width: 820, height: 390, title: 'heat map',
-      plot_bgcolor: "rgba(0,0,0,0)",
-      paper_bgcolor: "rgba(0,0,0,0)",
+    // this.graph.layout.height = this.chartHeight;
+    this.graph.layout.title = 'Trend Analysis';
+    this.graph.layout.font= {
+      family: 'Roboto',
+      // size: 14,
+      color: '#7f7f7f'
     }
+
+    
+
+    // let layOut = {
+    //   width: 820, height: 390, title: 'heat map',
+    //   plot_bgcolor: "rgba(0,0,0,0)",
+    //   paper_bgcolor: "rgba(0,0,0,0)",
+    // }
 
 
   }

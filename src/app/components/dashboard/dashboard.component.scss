@@ -38,7 +38,7 @@
     
 }
 .card4{
-    background:linear-gradient(100deg, #417de2,#3464b4);    
+    background: linear-gradient(100deg,#00b8ff, #417de2);    
     
 }
 
@@ -67,7 +67,8 @@
     // box-shadow: 0 1px 2px #000;
 }
 .abs1,.abs2,.abs3,.abs4{
-    background-color:#ddd !important;
+    // background-color:#ddd !important;
+    background: rgba(0,0,0,0.4) !important;
 }
 .abs1{
     background-color: orange;
@@ -120,8 +121,8 @@ mat-card-content{
     top:110px;right: 2px;
 }
 .wordCloud{
-    background-color: #864EFC;
-    box-shadow: 0 3px 10px #864efc !important;
+    background: linear-gradient(#864EFB,#502e97);
+    box-shadow: 0 3px 10px #000 !important;
 } 
 .heatCnt{
     background-color:#fff;

@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { SidenavFixedComponent } from '../start-up/sidenav-fixed/sidenav-fixed.component';
 import { DashboardComponent } from '../components/dashboard/dashboard.component';
 import { AuthGuard } from '../login/auth.guard';
+import { UploadComponent } from '../components/upload/upload.component';
 
 const routes: Routes = [
   {
@@ -13,6 +14,10 @@ const routes: Routes = [
       {
         path: 'dashboard',
         component: DashboardComponent
+      },
+      {
+        path: 'upload',
+        component: UploadComponent
       }
     ]
 },

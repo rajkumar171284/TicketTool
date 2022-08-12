@@ -1,0 +1,46 @@
+<div class="container-fluid">
+
+    <div class="overlay" *ngIf="loader">
+        <mat-spinner></mat-spinner>
+
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-md-12 dashboard-content">
+
+            <mat-card class="result2">
+
+                <mat-card-subtitle color="dark">File Upload </mat-card-subtitle>
+                <mat-card-content>
+
+                    <!-- <div class="file-upload">
+
+                    </div> -->
+                    <div class="drop_box">
+                           
+                        <ng-container >
+                            <header>
+                                <h4>Select File here</h4>
+                            </header>
+                            <p>Files Supported: CSV & XLSX</p>
+                            <input type="file" (change)="onSelectFile($event)" hidden accept=".png,.jpg,.jpeg"
+                                id="fileID" style="display:none;">
+                            <button (click)="enableClick()" class="btn">Choose File</button>
+                        </ng-container>
+                        <!-- <ng-container >
+                            <img class="logo-upload">
+                        </ng-container> -->
+                    </div>
+
+                
+                </mat-card-content>
+
+                <mat-card-footer>	more</mat-card-footer>
+            </mat-card>
+
+        </div>
+
+
+    </div>

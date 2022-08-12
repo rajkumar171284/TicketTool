@@ -16,14 +16,19 @@ export interface filteredData {
 })
 export class FilterDialogComponent implements OnInit, OnChanges {
 
-  newForm!: FormGroup;
+  newForm: FormGroup = this.fb.group({
+    START_DATE: '',
+    END_DATE: '',
+    heatMapFilterBy: ''
+  });
   @Input() widget!: any;
   @Input() startDate: any;
   @Input() endDate: any;
-  @Input() pattern: any;
+  // @Input() pattern: any;
 
   @Output() _getFilter = new EventEmitter();
   @Output() _priorityFilter = new EventEmitter();
+  @Output() _TrendFilter = new EventEmitter();
   toppingList: string[] = ['January',
     'February',
     'March',
@@ -33,21 +38,20 @@ export class FilterDialogComponent implements OnInit, OnChanges {
   hide1 = false;
   FilterBy: any = [];
   constructor(//@Optional() is used to prevent error if no data is passed
-    @Optional() @Inject(MAT_DIALOG_DATA) public data: any, private fb: FormBuilder
-  ) {
-    const arr = ['day', 'week', 'month'];
-    from(arr).pipe(startWith('Select')).subscribe(res => {
-      this.FilterBy.push({
-        key: res.toUpperCase()
-      })
-    })
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: any, private fb: FormBuilder) {
+    
     // console.log(this.FilterBy)
 
   }
 
   ngOnInit(): void {
     // console.log(this.data)
-
+    this.FilterBy = ['day', 'week', 'month'].map(res=>{
+      return {
+        key: res.toUpperCase()
+      }
+    });
+   
   }
   ngOnChanges(changes: SimpleChanges): void {
     console.log(this.startDate, this.endDate)
@@ -73,7 +77,7 @@ export class FilterDialogComponent implements OnInit, OnChanges {
   }
 
   onConfirmClick(): void {
-    console.log(this.pattern)
+    console.log(this.widget)
 
     if (this.newForm.valid) {
 
@@ -81,11 +85,13 @@ export class FilterDialogComponent implements OnInit, OnChanges {
       // this.dialogRef.close({ data: this.myForm.controls['toppings'].value })
 
 
-      if (this.pattern == 'priority') {
+      if (this.widget == 'priority') {
 
         this._priorityFilter.emit(this.VALUE)
-      } else if (this.pattern == 'tags') {
+      } else if (this.widget == 'tags') {
         this._getFilter.emit(this.VALUE)
+      }else if(this.widget=='heat-trend'){
+        this._TrendFilter.emit(this.VALUE)
       }
     }
 

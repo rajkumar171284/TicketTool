@@ -1,7 +1,7 @@
 .example-container {
   position: absolute;
   top: 60px;
-  bottom: 60px;
+  bottom: 0px;
   left: 0;
   right: 0;
   background-color: #fff;
@@ -15,7 +15,10 @@
   align-items: center;
   justify-content: center;
   width: 200px;
-  background-color: #fff;
+  // background-color: #fff;
+  // background: linear-gradient(44deg, #5d36b0, transparent);
+  background: radial-gradient(circle at 10% 20%, rgb(210, 36, 129) 0%, rgb(152, 75, 215) 90%);
+
   box-shadow: 0 3px 10px #864EFC;
   // background: linear-gradient(#000,#864EFC);
   // background:linear-gradient(#000 4%, #864EFC 100% )
@@ -66,10 +69,18 @@
 .top-menu button{
   color:#444;
 }
-.active-list-item {
-  color: #864EFC !important; /* Note: You could also use a custom theme */
-  // background: #7ca9f4 !important;
-  // box-shadow: 0 2px 4px #000;
+.active-list-item .alinks{
+  color: gold !important;
+  text-shadow: 0 2px 3px #000;
+
+}
+.alinks{
+  
+  width: 100%; padding: 10px;
+  // border: 1px solid blue;  
+  // box-shadow: 0 1px 2px #864efc ;
+  text-shadow: 0 2px 3px #000;
+  color: #fff;
 }
 
 

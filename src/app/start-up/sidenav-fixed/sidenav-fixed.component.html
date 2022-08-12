@@ -22,17 +22,30 @@
         <mat-list role="list" style="padding-top: 0;">
           <mat-list-item class="logo" role="listitem" >
             <img class="" src="assets/inspirisys-logo.png"/>
-            <button color="dark" class="pull-right" mat-button (click)="sidenav.toggle()">
+            <!-- <button color="dark" class="pull-right" mat-button (click)="sidenav.toggle()">
               <mat-icon >menu</mat-icon>
         
-            </button>
+            </button> -->
             
           </mat-list-item>
           <mat-nav-list style="padding-left: 10px;    padding-right: 10px;">
             <a mat-list-item routerLink="/home/dashboard" routerLinkActive="active-list-item">
-              <!-- <mat-icon>equalizer</mat-icon> -->
-              Dashboard
+              <div class="alinks">
+                <mat-icon>equalizer</mat-icon>
+                <mat-label>Dashboard</mat-label>
+              
+              </div>
             </a>
+
+            <a mat-list-item routerLink="/home/upload" routerLinkActive="active-list-item">
+              <div class="alinks">
+                <mat-icon>file_copy</mat-icon>
+              Upload
+              </div>
+            </a>
+
+
+
             <!-- <a mat-list-item >
               
               Control Panel 

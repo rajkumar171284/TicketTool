@@ -40,7 +40,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   options: CloudOptions = {
     width: 0.8,
-    height: 400,
+    height: 320,
     overflow: false,
     zoomOnHover: {
       scale: 1.2,
@@ -125,8 +125,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   getWordCloud(result: any) {
     // console.log(result)
     this.data = result.map((item: any) => {
+      // item.key=item.key?item.key.toUpperCase():'';
       return {
-        text: `${item.key}-${item.count} `, weight: item.count
+        text: `${item.key}`, weight: item.count
       }
     });
     this.loader = false;
@@ -284,7 +285,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // const val = Object.values(all_dates).map((z: any) => moment(z).format("DD-MM-YYYY"));
 
     const uniq = [...new Set(val)].map(z => z);
-    return uniq;
+    return val;
   }
   getDates2(all_dates: any) {
     const val = Object.values(all_dates).map((z: any) => moment(z).format("DD-MM-YYYY"));
@@ -318,7 +319,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   startPriority(dateFrom: any, dateTo: any) {
     const { Priority, Opened, Resolved } = this.responseResult;
 
-    this.TrendAnalysis.Priority=[];
+    this.TrendAnalysis.Priority = [];
     this.getPriority(Priority, dateFrom, dateTo);
     this.TrendAnalysis.PriorityLabel = 'Priority vs Count'//done
     console.log('PriorityLabel', this.TrendAnalysis)
@@ -474,8 +475,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
         console.log(newuniqTags)
         // format tags with dates ends
 
-        this.TrendAnalysis.xAxis = this.getCatg(pred_category);
-        this.TrendAnalysis.yAxis = this.getDates(Updated);
+
+        // heatmat starts
+        this.getTrendAnalysisData();
+        // this.TrendAnalysis.xAxis = this.getCatg(pred_category);
+        // this.TrendAnalysis.yAxis = this.getDates(Updated);
 
         // this.TrendAnalysis.zAxis = this.dateOccurance(Updated);
         // console.log(this.dateOccurance(Updated))
@@ -532,7 +536,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
               TotalTickts: Object.keys(item['Incident state']).length,
               totalMonths: totalMonth,
               Tags: this.getTags(item.pred_category),
-              totalServReq: totalServiceReq
+              totalServReq: totalServiceReq,
+              totalIncident:Object.keys(item['Major Incident']).length
             }
           });
         })
@@ -544,6 +549,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
       }
     });
 
+  }
+
+  getTrendAnalysisData() {
+    const { pred_category, Updated } = this.responseResult;
+
+    this.TrendAnalysis.xAxis = this.getCatg(pred_category);
+    this.TrendAnalysis.yAxis = this.getDates(Updated);
   }
   getPriority(Priority: any, dateFrom: any, dateTo: any) {
     // console.log('Priority', dateFrom, dateTo)
@@ -581,9 +593,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
       })
       // get unique
-      const uniq = [...new Set(newArray)].map(z=>z);
+      const uniq = [...new Set(newArray)].map(z => z);
       let total: any = [];
-      console.log(uniq)
+      // console.log(uniq)
       uniq.forEach((a: any) => {
         if (a) {
           let item: any = {};
@@ -592,7 +604,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
           const newArr = newArray.filter((obj: any) => {
             return obj == a;
           })
-          console.log(newArr)
+          // console.log(newArr)
           if (newArr.length > 0) {
             item.count = newArr.length;
           }
@@ -781,6 +793,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // }
   log(eventType: string, e?: any) {
     // console.log(eventType, e);
+  }
+  TrendFilter(e: any) {
+    if (e) {
+      this.loading = true;
+      this.TrendAnalysis.xAxis = [];
+      this.TrendAnalysis.yAxis = [];
+      this.TrendAnalysis.zAxis = [];
+    }
   }
 
   getPriorityFilter(e: any) {
