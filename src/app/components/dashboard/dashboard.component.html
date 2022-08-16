@@ -5,28 +5,18 @@
 
     </div>
 
-    <!-- <div class="floating">
-        <button mat-fab mat-button (click)="openDialog()">
-            <mat-icon>filter_list</mat-icon>
+    <div class="floating">
+        <button mat-fab mat-button (click)="downloadCSV()">
+            <mat-icon>cloud_download</mat-icon>
 
         </button>
 
-    </div> -->
+    </div>
     <div class="row">
 
         <div class="col-md-12 dashboard-content">
 
 
-            <!-- <div style="height:200px  ;overflow:scroll">
-                <div *ngFor="let a of arr">
-                    <pre>
-                        <mat-card-subtitle>
-                            {{a|json}}
-                        </mat-card-subtitle>
-                   
-                </pre>
-                </div>
-            </div> -->
 
             <div class="row">
 
@@ -190,9 +180,20 @@
                             [widget]="'tags'">
 
                         </app-filter-dialog> -->
-                        <app-plotly [loader]="loading" [totalCategory]="newMTTRList" [newLabel]="'MTTR analysis'"
-                            pMap="pie"></app-plotly>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <app-progressive-activity [loader]="loading" [totalCategory]="newMTTRList" [newLabel]="'MTTR analysis'">
+                                    
+                                </app-progressive-activity>
+                            </div>
+                            <div class="col-md-6">
+                                <app-plotly [loader]="loading" [totalCategory]="newMTTRList" [newLabel]="'MTTR analysis'"
+                                pMap="pie"></app-plotly>
+    
 
+                            </div>
+                        </div>
+                        
 
                     </mat-card>
                 </div>

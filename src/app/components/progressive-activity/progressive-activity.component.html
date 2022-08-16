@@ -1,0 +1,40 @@
+<div class="inner-panel">
+
+
+    <div class="">
+      <div *ngIf="loading" class="overlay">
+        <mat-spinner></mat-spinner>
+      </div>
+
+     
+
+
+      <div class="my-card-footer theme2">
+        <mat-card-header class="text-uppercase">
+          PROGRESS OF {{WIDGET_REQUEST && WIDGET_REQUEST?WIDGET_REQUEST.CONFIG_NAME:''}}
+        </mat-card-header>
+      </div>
+
+      <cdk-virtual-scroll-viewport appendOnly itemSize="50" class="example-viewport">
+        <div *cdkVirtualFor="let element of totalCategory" class="example-item">
+          <div class="t-flex">
+            <div class="text-uppercase">{{element.Tag}}</div>
+            <div>
+              <span class="my-badge defaultBadge">
+                {{element.hours | number:'1.2-2'}}
+              </span>
+              
+              <mat-progress-bar mode="determinate" [value]="element.hours"></mat-progress-bar>
+
+            </div>
+
+            
+          </div>
+        
+        </div>
+      </cdk-virtual-scroll-viewport>
+
+    </div>
+
+
+</div>

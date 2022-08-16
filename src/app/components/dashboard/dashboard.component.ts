@@ -14,15 +14,11 @@ import * as XLSX from 'xlsx';
 import { Subscription, Observable, of, from, concatMap, switchMap, take } from 'rxjs';
 import { delay, tap, map, filter, mergeMap, startWith } from "rxjs/operators";
 const apiData2 = ajax('/assets/result.json');
-// import EmployeesJson from '../assets/test.json';
-// import {default as a} from "../../../assets/test";
 
-// import myj from '../../../assets/result.json';
-// import * as data from '../../../assets/result';
 import * as moment from 'moment';
 import { newArray } from '@angular/compiler/src/util';
 const date = new Date();
-
+import { AngularCsv } from 'angular-csv-ext/dist/Angular-csv';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -819,13 +815,40 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.newMTTRList = [];
 
       this.loadData(new Date(e.START_DATE), new Date(e.END_DATE));
-      const arr = this.api.getTicketsByDateWise(e, Object.values(this.overAllData[0].Resolved));
-      // console.log(arr)
-      // this.loading = false;
+      // const arr = this.api.getTicketsByDateWise(e, Object.values(this.overAllData[0].Resolved));
+      // // console.log(arr)
+      // // this.loading = false;
 
 
 
     }
+  }
+
+  downloadCSV(){
+    var data = [
+      {
+        name: "Test 1",
+        age: 13,
+        average: 8.2,
+        approved: true,
+        description: "using 'Content here, content here' "
+      },
+      {
+        name: 'Test 2',
+        age: 11,
+        average: 8.2,
+        approved: true,
+        description: "using 'Content here, content here' "
+      },
+      {
+        name: 'Test 4',
+        age: 10,
+        average: 8.2,
+        approved: true,
+        description: "using 'Content here, content here' "
+      },
+    ];
+    new AngularCsv(data, 'My Report');
   }
 }
 

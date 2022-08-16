@@ -29,7 +29,7 @@
   top: 0;
   left: 0;
   right: 0;
-  background-color: #f3f3f3;
+  background-color: #fff;
   /* Created with https://www.css-gradient.com */
 // background: #5C1D8E;
 // background: -webkit-linear-gradient(top left, #5C1D8E, #864EFC);
@@ -62,6 +62,7 @@
   width: 100%;
   display: flex;
   justify-content: flex-end;
+  color:#888;
 }
 .example-header>button{
   color:#444;

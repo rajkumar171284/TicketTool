@@ -26,11 +26,12 @@ import { HeatmapPlotlyComponent } from './components/heatmap-plotly/heatmap-plot
 import { SidenavModule } from './sidenav/sidenav.module';
 import { UploadComponent } from './components/upload/upload.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {ProgressiveActivityComponent} from './components/progressive-activity/progressive-activity.component';
 
 @NgModule({
   declarations: [
     AppComponent, DashboardComponent, ChartjsComponent, FilterDialogComponent,
-    PlotlyComponent, LeafletComponent, HeatmapPlotlyComponent,UploadComponent
+    PlotlyComponent, LeafletComponent, HeatmapPlotlyComponent,UploadComponent,ProgressiveActivityComponent
   ],
   imports: [
     BrowserModule,

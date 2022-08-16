@@ -1,0 +1,70 @@
+.table-card {
+  height: 273px;
+  overflow: hidden;
+  position: relative
+}
+
+.theme2 {}
+
+.tbl-status {
+  height: 40px;
+  filter: grayscale(100%) brightness(40%) sepia(100%) hue-rotate(50deg) saturate(1000%) contrast(0.8)
+}
+
+.mat-table {
+  overflow-y: scroll;
+}
+
+.example-container {
+
+  height: 240px;
+
+  max-width: 100%;
+
+  overflow: hidden;
+
+}
+.example-container:hover{
+  overflow: auto !important;
+}
+.mat-card:not([class*=mat-elevation-z0]){
+  box-shadow: none;
+  }
+.my-badge {
+    font-weight: 500;
+  display: inline-block;    color: orangered;
+}
+.my-cell-icon img{
+  max-height: 40px;
+}
+td.mat-cell{
+  border: none !important;    color: #888;
+  text-transform: uppercase;
+}
+.defaultBadge {
+  // background-color: #b2eff9;
+}
+
+.thresholdBadge {
+  background-color: #e40000;
+}
+
+.example-viewport {
+  margin-top: 20px;
+    height: 235px;
+    // width: 200px;
+    // border: 1px solid black;
+  }
+  
+  .example-item {
+    height: 50px;
+  }
+  .t-flex{
+  display: flex;    flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  text-align: left; color:#888;
+  }
+  .t-flex div{
+  width: 33.33333%;
+  }
