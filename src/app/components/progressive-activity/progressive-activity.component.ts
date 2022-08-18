@@ -52,19 +52,7 @@ export class ProgressiveActivityComponent implements OnInit, OnChanges {
   getAlldata() {
 
     this.loading=false;
-    // this.dataService.getMACByConfigID({ PID: this.WIDGET_REQUEST.ASSET_CONFIG_ID }).subscribe(res => {
-    //   // console.log(res)
-
-    //   this.dataSource = res.data.map((res: any) => res);
-    //   // this.ref.detectChanges();
-    //   // res.data.forEach((_item: any, index: number) => {
-    //   //   console.log(index)
-    //   //     this.dataSource.push(_item)
-
-
-    //   // });
-    //   this.ref.detectChanges();
-    // })
+    
   }
 
   

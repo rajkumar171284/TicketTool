@@ -17,8 +17,8 @@ export interface filteredData {
 export class FilterDialogComponent implements OnInit, OnChanges {
 
   newForm: FormGroup = this.fb.group({
-    START_DATE: '',
-    END_DATE: '',
+    START_DATE: [new Date(), Validators.required],
+    END_DATE: ['', Validators.required],
     heatMapFilterBy: ''
   });
   @Input() widget!: any;

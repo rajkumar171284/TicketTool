@@ -119,9 +119,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   }
   getWordCloud(result: any) {
-    // console.log(result)
+
     this.data = result.map((item: any) => {
-      // item.key=item.key?item.key.toUpperCase():'';
       return {
         text: `${item.key}`, weight: item.count
       }
@@ -276,13 +275,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return Object.values(all_dates).map((z: any) => moment(z).format("DD-MM-YYYY"));
 
   }
-  getDates(all_dates: any) {
-    const val = Object.values(all_dates).map((z: any) => new Date(z));
-    // const val = Object.values(all_dates).map((z: any) => moment(z).format("DD-MM-YYYY"));
 
-    const uniq = [...new Set(val)].map(z => z);
-    return val;
-  }
   getDates2(all_dates: any) {
     const val = Object.values(all_dates).map((z: any) => moment(z).format("DD-MM-YYYY"));
     const uniq = [...new Set(val)].map(z => z);
@@ -356,6 +349,25 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.loading = false;
     })
   }
+  getYaxisDates(all_dates: any) {
+    const val = Object.values(all_dates).map((z: any) => new Date(z));
+    // const val = Object.values(all_dates).map((z: any) => moment(z).format("DD-MM-YYYY"));
+
+    // const uniq = [...new Set(val)].map(z => z);
+    const yaxis = val.filter((req: any) => {
+      var date = new Date(req);
+      // console.log(date)
+     
+      const start = new Date(this.dateFrom);
+      const end = new Date(this.dateTo);
+      // console.log(start)
+      // console.log(end)
+      return (date >= start && date <= end);
+    })
+    this.loading = false;
+    return yaxis;
+  }
+
   initCall() {
 
     // this.originalData = [];
@@ -533,7 +545,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
               totalMonths: totalMonth,
               Tags: this.getTags(item.pred_category),
               totalServReq: totalServiceReq,
-              totalIncident:Object.keys(item['Major Incident']).length
+              totalIncident: Object.keys(item['Major Incident']).length
             }
           });
         })
@@ -551,7 +563,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     const { pred_category, Updated } = this.responseResult;
 
     this.TrendAnalysis.xAxis = this.getCatg(pred_category);
-    this.TrendAnalysis.yAxis = this.getDates(Updated);
+    this.TrendAnalysis.yAxis = this.getYaxisDates(Updated);
   }
   getPriority(Priority: any, dateFrom: any, dateTo: any) {
     // console.log('Priority', dateFrom, dateTo)
@@ -793,9 +805,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
   TrendFilter(e: any) {
     if (e) {
       this.loading = true;
-      this.TrendAnalysis.xAxis = [];
+      // this.TrendAnalysis.xAxis = [];
       this.TrendAnalysis.yAxis = [];
-      this.TrendAnalysis.zAxis = [];
+      // this.TrendAnalysis.zAxis = [];
+      this.dateFrom = e.START_DATE;
+      this.dateTo = e.END_DATE;
+      this.TrendAnalysis.optionName = e.heatMapFilterBy ? e.heatMapFilterBy : '';
+      console.log(this.TrendAnalysis)
+      // get from original data
+      const { pred_category, Updated } = this.responseResult;
+
+      this.TrendAnalysis.yAxis = this.getYaxisDates(Updated);
+
     }
   }
 
@@ -824,7 +845,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  downloadCSV(){
+  downloadCSV() {
     var data = [
       {
         name: "Test 1",

@@ -7,8 +7,7 @@
         <mat-form-field color="primary" class="example-full-width" appearance="outline">
           <mat-label>Start Date</mat-label>
           <input matInput type="date" formControlName="START_DATE"  placeholder="Choose a date">
-          <!-- <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker> -->
+        
         </mat-form-field>
       </div>
 
@@ -17,12 +16,11 @@
           <mat-label>End Date</mat-label>
 
           <input matInput type="date" formControlName="END_DATE"  placeholder="Choose a date">
-          <!-- <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
-          <mat-datepicker #picker2></mat-datepicker> -->
+         
         </mat-form-field>
       </div>
 
-      <div class="col-md-3">
+      <!-- <div class="col-md-3">
 
         <mat-form-field *ngIf="widget=='heat-trend'" class="example-full-width" appearance="outline">
           <mat-label>Select</mat-label>
@@ -34,7 +32,7 @@
               {{item.key}}</mat-option>
           </mat-select>
         </mat-form-field>
-      </div>
+      </div> -->
       <div class="col-md-3">
         <button  mat-raised-button (click)="onConfirmClick()">Search</button>
       </div>

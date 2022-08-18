@@ -21,8 +21,13 @@
             <div class="text-uppercase">{{element.Tag}}</div>
             <div>
               <span class="my-badge defaultBadge">
-                {{element.hours | number:'1.2-2'}}
+                {{element.hours}} hr
               </span>
+
+              <span class="my-badge defaultBadge">
+                / {{element.count}} count
+              </span>
+              
               
               <mat-progress-bar mode="determinate" [value]="element.hours"></mat-progress-bar>
 

@@ -39,7 +39,8 @@ export class PlotlyComponent implements OnInit, OnChanges {
     data: [
       { x: [1, 2, 3], y: [2, 3, 4], type: 'bar' },
     ],
-    layout: { title: this.newLabel ,
+    layout: {
+      title: this.newLabel,
       font: {
         family: 'Roboto',
         // size: 14,
@@ -62,7 +63,7 @@ export class PlotlyComponent implements OnInit, OnChanges {
   interactivePlotSubject$: Subject<any> = new BehaviorSubject<any>(this.graph2.data);
 
 
-  opacity:number=0.7;
+  opacity: number = 0.7;
   constructor() { }
 
   ngOnInit(): void {
@@ -70,7 +71,7 @@ export class PlotlyComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     console.log(changes, this.loader)
-    
+
     if (this.pMap === 'tag-Bar') {
       // console.log(this.totalCategory)
       this.data = [
@@ -113,7 +114,9 @@ export class PlotlyComponent implements OnInit, OnChanges {
       this.loader = false;
 
     } else if (this.pMap === 'pie') {
-      this.pieChart(this.totalCategory)
+
+      this.donutChart(this.totalCategory);
+      // this.pieChart(this.totalCategory);
 
     } else if (this.Priority && this.pMap == 'bar') {
       this.barChart(this.Priority)
@@ -164,31 +167,34 @@ export class PlotlyComponent implements OnInit, OnChanges {
   }
 
 
-  pieChart(result: any) {
+  donutChart(result: any) {
+    result = result.map((z: any) => {
+      z.avg = Math.round(z.hours / z.count);
+      return z;
+    });
+    var xArray = result.map((z: any) => z.Tag);
+    var yArray = result.map((z: any) => z.avg);
 
-    let data: any = [];
-    let labelArr: any = [];
+
+    this.data = [{ labels: xArray, values: yArray, hole: .4, type: "pie",
+    textposition:'none'
+   }];
+    this.graph1.data = this.data;
+    // this.graph1.layout.width = this.chartWidth;
+    this.graph1.layout.height = 400;
+    this.graph1.layout.title = this.newLabel;
+  }
+
+  pieChart(result: any) {
     result = result.map((z: any) => {
       z.avg = (z.hours / z.count);
       return z;
     });
 
-    // y value
-    // console.log(result)
-    for (let units of result) {
-      // format VALUE json as key & value
-      labelArr.push(units.Tag)
-      data.push(units.avg)
-
-    }
-
-
-    // console.log('data', data)
-    // console.log('labelArr', labelArr)
     var traceA = {
       type: "pie",
-      values: result.map((z:any)=>z.avg),
-      labels: result.map((z:any)=>z.Tag),
+      values: result.map((z: any) => z.avg),
+      labels: result.map((z: any) => z.Tag),
       hole: 0.25,
       pull: [0.1, 0, 0, 0, 0],
       direction: 'clockwise',
@@ -216,7 +222,7 @@ export class PlotlyComponent implements OnInit, OnChanges {
     };
 
     this.data = [traceA];
-// console.log('pip',this.data)
+    // console.log('pip',this.data)
     this.graph1.data = this.data;
     // this.graph1.layout.width = this.chartWidth;
     this.graph1.layout.height = 400;

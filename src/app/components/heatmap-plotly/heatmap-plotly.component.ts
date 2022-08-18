@@ -15,6 +15,7 @@ export class HeatmapPlotlyComponent implements OnInit, OnChanges {
   @Input() xAxis: any = [];
   @Input() yAxis: any = [];
   @Input() zAxis: any = [];
+  @Input()optionName:any;
   chartHeight = 320;
 
   constructor() { }
@@ -24,13 +25,20 @@ export class HeatmapPlotlyComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     // console.log(changes)
-    const arr = new Mainclass();
 
-    const yAxis=this.yAxis.map((d:any)=>moment(new Date(d)).format("yyyy-MM-dd"));
+    const yAxis=this.yAxis.map((d:any)=>moment(new Date(d)).format("yyyy-MM-DD"));
     // console.log(yAxis)
-    const uniqYaxis=[...new Set(yAxis)].map((d:any)=>d);
-   
 
+    const sorted=yAxis.sort(function(a:any, b:any){
+      let date1:any = new Date(a)
+      let date2:any = new Date(b)
+      
+      return date1 - date2;
+  })
+   
+    const uniqYaxis=[...new Set(sorted)].map((d:any)=>d);
+   
+    console.log(uniqYaxis)
     let zarr: any = []
     this.zAxis.forEach((ele: any) => {
       let arr = ele.dateOccurance.map((times: any) => {
@@ -48,27 +56,14 @@ export class HeatmapPlotlyComponent implements OnInit, OnChanges {
         y: uniqYaxis,
         z: zarr,
         type: 'heatmap',
-        // colorscale:[[0, 'whitesmoke'], [0.33, 'limegreen'], [0.67, 'tomato'], [1, 'teal']]
-        // colorscale: [[1, 'whitesmoke'], [3, 'limegreen'], [6, '#674ea7'], [12, 'red']],
-        // colorscale: [
-        //   ['0.0', 'rgb(165,0,38)'],
-        //   ['0.111111111111', 'rgb(215,48,39)'],
-        //   ['0.222222222222', 'rgb(244,109,67)'],
-        //   ['0.333333333333', 'rgb(253,174,97)'],
-        //   ['0.444444444444', 'rgb(254,224,144)'],
-        //   ['0.555555555556', 'rgb(224,243,248)'],
-        //   ['0.666666666667', 'rgb(171,217,233)'],
-        //   ['0.777777777778', 'rgb(116,173,209)'],
-        //   ['0.888888888889', 'rgb(69,117,180)'],
-        //   ['1.0', 'rgb(49,54,149)']
-        // ],
+        
         colorscale: [[0, 'rgb(166,206,227)'], [0.25, 'rgb(31,120,180)'], [0.45, 'rgb(178,223,138)'], [0.65, 'rgb(51,160,44)'], [0.85, 'rgb(251,154,153)'], [1, 'rgb(227,26,28)']],
         xgap: 1, ygap: 1, opacity: 1,
         showscale: true, zsmooth: true,
         //  hoverinfo: "text", 
       }
     ];
-    // console.log(data[0].y)
+    console.log(data)
     // console.log(data[0].z)
     this.graph.data = data;
     // this.graph.layout.height = this.chartHeight;
