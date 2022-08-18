@@ -172,13 +172,42 @@ export class PlotlyComponent implements OnInit, OnChanges {
       z.avg = Math.round(z.hours / z.count);
       return z;
     });
+    let data: any = [];
+    let valArray: any = [];
+    for (let a of result) {
+      valArray.push(a.avg);
+
+      const item = {
+        values: valArray,
+        labels: result.map((z: any) => z.Tag),
+        domain: { column: 0 },
+        name: 'TAG',
+        hoverinfo: 'label+percent+name',
+        hole: .4,
+        type: 'pie'
+      }
+      data.push(item);
+    }
+    this.graph1.data = data;
+    // this.graph1.layout.width = this.chartWidth;
+    this.graph1.layout.height = 400;
+    // this.graph1.layout.title = this.newLabel;
+  }
+
+  donutChart2(result: any) {
+    result = result.map((z: any) => {
+      z.avg = Math.round(z.hours / z.count);
+      return z;
+    });
     var xArray = result.map((z: any) => z.Tag);
     var yArray = result.map((z: any) => z.avg);
 
 
-    this.data = [{ labels: xArray, values: yArray, hole: .4, type: "pie",
-    textposition:'none'
-   }];
+    this.data = [{
+      labels: xArray, values: yArray, hole: .4, type: "pie",
+      // textposition:'values',
+      // hoverinfo: 'label',
+    }];
     this.graph1.data = this.data;
     // this.graph1.layout.width = this.chartWidth;
     this.graph1.layout.height = 400;

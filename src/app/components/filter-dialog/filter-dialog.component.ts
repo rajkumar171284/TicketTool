@@ -54,7 +54,7 @@ export class FilterDialogComponent implements OnInit, OnChanges {
    
   }
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.startDate, this.endDate)
+    // console.log(this.startDate, this.endDate)
     if (this.widget == 'tags') {
       this.newForm = this.fb.group({
         START_DATE: [new Date(), Validators.required],

@@ -2,6 +2,9 @@
     padding: 2em;  
       background: #fff
 }
+.mat-progress-spinner circle, .mat-spinner circle {
+    stroke: #2A79FF!important;
+}
 .mat-dialog-container ,.backdropBackground {
     background: #fff !important;
  }

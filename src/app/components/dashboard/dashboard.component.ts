@@ -869,7 +869,23 @@ export class DashboardComponent implements OnInit, OnDestroy {
         description: "using 'Content here, content here' "
       },
     ];
-    new AngularCsv(data, 'My Report');
+    data=this.newMTTRList; 
+
+    const hdr=data[0];
+    var options = { 
+      fieldSeparator: ',',
+      quoteStrings: '"',
+      decimalseparator: '.',
+      showLabels: true, 
+      showTitle: true,
+      title: 'Tag Report',
+      useBom: true,
+      noDownload: false,
+      headers: Object.keys(hdr).map(z=>z),
+      useHeader: true,
+      nullToEmptyString: true,
+    };
+    new AngularCsv(data,`TagReport${moment().format("DD-MM-YY")}`,options);
   }
 }
 

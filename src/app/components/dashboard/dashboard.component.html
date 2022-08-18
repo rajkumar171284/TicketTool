@@ -1,9 +1,8 @@
+<!-- <div class="overlay" *ngIf="loader">
+    <mat-progress-spinner></mat-progress-spinner>
+
+</div> -->
 <div class="container-fluid">
-
-    <div class="overlay" *ngIf="loader">
-        <mat-spinner></mat-spinner>
-
-    </div>
 
     <div class="floating">
         <button mat-fab mat-button (click)="downloadCSV()">
@@ -29,8 +28,8 @@
                                 <mat-icon>av_timer</mat-icon>
 
                             </div>
-                            {{jsonResponse.length>0?jsonResponse[0].TotalTickts:0}}
-                            <!-- <mat-icon style="color:#ddd">bookmark_border</mat-icon> -->
+                            <ngx-skeleton-loader *ngIf="jsonResponse.length==0" count="1" appearance="line" animation="pulse"></ngx-skeleton-loader>
+                            {{jsonResponse.length>0?jsonResponse[0].TotalTickts:''}}
 
                         </mat-card-content>
 
@@ -48,12 +47,12 @@
                                 <mat-icon>date_range</mat-icon>
 
                             </div>
-                            {{jsonResponse.length>0?jsonResponse[0].totalMonths:0}}
-                            <!-- <mat-icon style="color:green">arrow_upward</mat-icon> -->
+                            <ngx-skeleton-loader *ngIf="jsonResponse.length==0" count="1" appearance="line" animation="pulse"></ngx-skeleton-loader>
+
+                            {{jsonResponse.length>0?jsonResponse[0].totalMonths:''}}
 
                         </mat-card-content>
 
-                        <!-- <mat-card-footer>	more</mat-card-footer> -->
                     </mat-card>
                 </div>
 
@@ -66,13 +65,13 @@
                                 <mat-icon>library_books</mat-icon>
 
                             </div>
-                            {{jsonResponse.length>0?jsonResponse[0].totalServReq:0}}
-                            <!-- <mat-icon style="color:#ddd">
-                                change_history</mat-icon> -->
+                            <ngx-skeleton-loader *ngIf="jsonResponse.length==0" count="1" appearance="line" animation="pulse"></ngx-skeleton-loader>
+
+                            {{jsonResponse.length>0?jsonResponse[0].totalServReq:''}}
+                            
 
                         </mat-card-content>
 
-                        <!-- <mat-card-footer>	more</mat-card-footer> -->
                     </mat-card>
                 </div>
                 <div class="col-md-3">
@@ -84,14 +83,12 @@
                                 <mat-icon>list_alt</mat-icon>
 
                             </div>
+                            <ngx-skeleton-loader *ngIf="jsonResponse.length==0" count="1" appearance="line" animation="pulse"></ngx-skeleton-loader>
 
-                            {{jsonResponse.length>0?jsonResponse[0].totalIncident:0}}
+                            {{jsonResponse.length>0?jsonResponse[0].totalIncident:''}}
                         
-                            <!-- <mat-icon style="color:red">arrow_downward</mat-icon> -->
-
                         </mat-card-content>
 
-                        <!-- <mat-card-footer>	more</mat-card-footer> -->
                     </mat-card>
                 </div>
 
@@ -102,6 +99,7 @@
             <div class="row">
                 <div class="col-md-12 ">
                     <mat-card class=" mt-4 mb-3 wordCloud">
+                        <!-- <ngx-skeleton-loader *ngIf="data.length==0" count="8" appearance="line" animation="pulse"></ngx-skeleton-loader> -->
 
                         <angular-tag-cloud (clicked)="log('clicked', $event)" [data]="data" [width]="options.width"
                             [height]="options.height" [overflow]="options.overflow" [zoomOnHover]="options.zoomOnHover"
@@ -175,7 +173,7 @@
             <div class="row ">
                 <!-- tag vs tag count -->
                 <div class="col-md-12">
-                    <mat-card *ngIf="newMTTRList.length>0" class="result2 mt-4 mb-3">
+                    <mat-card *ngIf="newMTTRList.length>0" class="mybg result2 mt-4 mb-3">
                         <!-- <app-filter-dialog [startDate]="dateFrom" [endDate]="dateTo" (_getFilter)="getFilter($event)"
                             [widget]="'tags'">
 

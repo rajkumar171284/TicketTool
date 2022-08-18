@@ -110,8 +110,9 @@ export class ApiService {
     // let days:any = ((endDate - today) / (1000 * 60 * 60 * 24));
     const hours = (Math.abs(endDate - today) / (1000 * 60 * 60) % 24);
     const minutes = (Math.abs(endDate.getTime() - today.getTime()) / (1000 * 60) % 60);
-    const seconds = (Math.abs(endDate.getTime() - today.getTime()) / (1000) % 60);
-    return Math.round(hours)+'.'+Math.round(minutes)
+    // const seconds = (Math.abs(endDate.getTime() - today.getTime()) / (1000) % 60);
+    return Math.round(hours);
+    // return {hours:Math.round(hours),min:Math.round(minutes)};
   }
 
 

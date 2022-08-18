@@ -27,6 +27,7 @@ import { SidenavModule } from './sidenav/sidenav.module';
 import { UploadComponent } from './components/upload/upload.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {ProgressiveActivityComponent} from './components/progressive-activity/progressive-activity.component';
+import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,7 @@ import {ProgressiveActivityComponent} from './components/progressive-activity/pr
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule, MaterialModule,
-    FormsModule,MatProgressSpinnerModule,
+    FormsModule,MatProgressSpinnerModule,NgxSkeletonLoaderModule,
     HttpClientModule,
     MatNativeDateModule,
     ReactiveFormsModule, TagCloudModule, PlotlyModule, LeafletModule, SidenavModule
