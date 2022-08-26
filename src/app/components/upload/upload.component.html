@@ -20,7 +20,7 @@
                     </div> -->
                     <div class="drop_box">
                            
-                        <ng-container >
+                        <ng-container *ngIf="!csvFile">
                             <header>
                                 <h4>Select File here</h4>
                             </header>
@@ -29,9 +29,19 @@
                                 id="fileID" style="display:none;">
                             <button (click)="enableClick()" class="btn">Choose File</button>
                         </ng-container>
-                        <!-- <ng-container >
-                            <img class="logo-upload">
-                        </ng-container> -->
+
+                        
+                        <ng-container *ngIf="csvFile">
+                            <div class="csvFile">
+                                The File {{csvFile.name}} has been uploaded..
+                            </div>
+                            <div class="mt-3">
+                                <button mat-flat-button  type="submit">Continue</button>
+
+                                <!-- Uploaded File: {{csvFile.name}} -->
+                            </div>
+                            
+                        </ng-container>
                     </div>
 
                 

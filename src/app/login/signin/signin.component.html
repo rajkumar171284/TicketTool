@@ -1,41 +1,58 @@
-<div class="one">
+<div class="landing-bg">
+
+    <div class="content-wrapper">
+
+
 
         <div class="container">
             <div class="row">
-                <div class="myform col-md-6 offset-md-3">
-                    <form [formGroup]="logForm" (ngSubmit)="logIn()" novalidate>
 
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Username</mat-label>
-                        <input type="text" matInput formControlName="username" placeholder="" autocomplete="off">
-                        <!-- <mat-hint>Errors appear instantly!</mat-hint>
-                        <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
-                          Please enter a valid email address
-                        </mat-error>
-                        <mat-error *ngIf="emailFormControl.hasError('required')">
-                          Email is <strong>required</strong>
-                        </mat-error> -->
-                    </mat-form-field>
-
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <mat-label>Password</mat-label>
-                        <input type="password" matInput formControlName="password" placeholder="">
+                <!-- <img class="" src="assets/copy.gif" /> -->
+                <div class="col-md-4 offset-md-4 mb-3">
+                    <mat-list role="list" style="padding-top: 0;">
+                        <mat-list-item class="logo" role="listitem">
+                            <img class="" src="assets/inspirisys-logo.png" />
 
 
-                    </mat-form-field>
-                    <div class="example-full-width text-center">
-                        <button mat-stroked-button color="primary" type="submit" >Login</button>
+                        </mat-list-item>
+                    </mat-list>
+                </div>
+            </div>
+            <div class="row">
 
-                    </div>
-                    <!-- <mat-form-field class="example-full-width text-center" appearance="fill"> -->
+                <div class="myform col-md-4 offset-md-4">
+                    <mat-card color="light">
+
+                        <form [formGroup]="logForm" (ngSubmit)="logIn()" novalidate>
+
+                            <mat-form-field class="example-full-width" appearance="fill">
+                                <mat-label>Username</mat-label>
+                                <input type="text" matInput formControlName="username" placeholder=""
+                                    autocomplete="off">
+
+                            </mat-form-field>
+
+                            <mat-form-field class="example-full-width" appearance="fill">
+                                <mat-label>Password</mat-label>
+                                <input type="password" matInput formControlName="password" placeholder="">
 
 
+                            </mat-form-field>
+                            <div class="example-full-width text-left">
+                                <button mat-flat-button  type="submit">Login</button>
+                                <button (click)="navigate()" mat-flat-button style="float: right;background: transparent !important;
+                                color: #fff;" type="submit">Skip login
+                            <mat-icon>skip_next</mat-icon>
+    
+                            </button>
 
-                    <!-- </mat-form-field> -->
-                </form>
+                            </div>
+
+                        </form>
+                    </mat-card>
 
                 </div>
             </div>
         </div>
-
+    </div>
 </div>

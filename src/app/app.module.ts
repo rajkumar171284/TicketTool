@@ -28,6 +28,7 @@ import { UploadComponent } from './components/upload/upload.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {ProgressiveActivityComponent} from './components/progressive-activity/progressive-activity.component';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
+// import { PapaParseModule } from 'ngx-papaparse';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
   ],
   imports: [
     BrowserModule,
+    
     AppRoutingModule,
     BrowserAnimationsModule, MaterialModule,
     FormsModule,MatProgressSpinnerModule,NgxSkeletonLoaderModule,

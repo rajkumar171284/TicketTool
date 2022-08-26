@@ -137,7 +137,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       const uniq = result.map((item: any) => {
         return item[tagKey];
       })
-      // console.log('uniq', uniq)
       const totalCategory = [...new Set(uniq)].map(z => z);///get total tags with uniq
       this.totalCategory = [];
       for (let a of totalCategory) {
@@ -163,9 +162,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   getTags(category: any) {
-    // console.log(category)
     const catg = Object.values(category).map(x => x)
-    // console.log(catg)
     const totalCategory = [...new Set(catg)].map(z => z);///get total tags with uniq
     this.totalCategory = [];
     for (let a of totalCategory) {
@@ -178,7 +175,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       })
       if (newArr.length > 0) {
         item.count = newArr.length;
-
       }
       if (item.key) {
         this.totalCategory.push(item)
@@ -199,8 +195,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.dateTo = new Date();
     let fromdate: any = moment().subtract(10, 'months');
     this.dateFrom = new Date(fromdate);
-    console.log(this.dateTo, this.dateFrom)
+    // console.log(this.dateTo, this.dateFrom)
     this.initCall();
+    // this.initCall2();
   }
   dateOccurance(all_dates: any) {
     let newArr = [];
@@ -368,50 +365,46 @@ export class DashboardComponent implements OnInit, OnDestroy {
     return yaxis;
   }
 
+  initCall2(){
+    this.api.getDatafromCSV2().then(result=>{
+      console.log(result)
+      // const alltags = this.getAllTags(pred_category);
+      from(result).pipe(map((key: any, index) => {
+
+        // return {
+        //   Opened: new Date(key),
+        //   Resolved: new Date(ResolvedDates[index]),
+        //   Tag: alltags[index],
+        //   hours: this.api.diff_hours(new Date(ResolvedDates[index]), new Date(key)),
+        //   count: 1
+        
+        // }
+        return key
+  
+      }), filter((req: any) => {
+        var date = req.Resolved;
+        const start = new Date(this.dateFrom);
+        const end = new Date(this.dateTo);
+        return (date >= start && date <= end);
+      })
+  
+      ).subscribe(resp => {
+        console.log('subscribe', resp)
+        // this.getMTTR(resp);
+        this.loading = false;
+      })
+
+    })
+  }
   initCall() {
 
-    // this.originalData = [];
     this.api.getTickets().subscribe(result => {
       if (result) {
         console.log(result)
         this.responseResult = result[0];
         this.loadData(this.dateFrom, this.dateTo);
         const { pred_category, Updated, Priority, Opened, Resolved } = result[0];
-
-        // console.log(pred_category)
-
-        // MTTR analysis. i.e.  (END TIME – START TIME)= MTTR.  if ticket is created at 01.01.2022 at 12pm and closed at 02.01.2022 at 1pm then MTTR is 25 hours. For each TAGS we should have a AVERAGE MTTR.
-
-        // start-- format opened dates starts
-        // const openedDates = this.getAllDateTimes(Opened);
-        // format Resolved dates starts
-        // const ResolvedDates = this.getAllDateTimes(Resolved);
-
-
-        // from(openedDates).pipe(map((key: any, index) => {
-
-        //   return {
-        //     Opened: new Date(key),
-        //     Resolved: new Date(ResolvedDates[index]),
-        //     Tag: alltags[index],
-        //     hours: this.api.diff_hours(new Date(ResolvedDates[index]), new Date(key)),
-        //     count: 1
-        //     // index:index
-        //   }
-
-        // }), filter((req: any) => {
-        //   var date = req.Resolved;  
-        //   const start = new Date(req.START_DATE);
-        //   const end = new Date(req.END_DATE);
-        //   return (date >= start && date <= end);
-        // })
-
-        // ).subscribe(resp => {
-        //   // console.log('subscribe',resp)
-        //   this.getMTTR(resp);
-
-        // })
-
+       
         console.log('newMTTRList', this.newMTTRList);
 
         // get all tags
@@ -836,39 +829,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.newMTTRList = [];
 
       this.loadData(new Date(e.START_DATE), new Date(e.END_DATE));
-      // const arr = this.api.getTicketsByDateWise(e, Object.values(this.overAllData[0].Resolved));
-      // // console.log(arr)
-      // // this.loading = false;
-
-
 
     }
   }
 
   downloadCSV() {
-    var data = [
-      {
-        name: "Test 1",
-        age: 13,
-        average: 8.2,
-        approved: true,
-        description: "using 'Content here, content here' "
-      },
-      {
-        name: 'Test 2',
-        age: 11,
-        average: 8.2,
-        approved: true,
-        description: "using 'Content here, content here' "
-      },
-      {
-        name: 'Test 4',
-        age: 10,
-        average: 8.2,
-        approved: true,
-        description: "using 'Content here, content here' "
-      },
-    ];
+    var data = [];
     data=this.newMTTRList; 
 
     const hdr=data[0];

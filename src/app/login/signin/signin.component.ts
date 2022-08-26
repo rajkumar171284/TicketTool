@@ -8,14 +8,14 @@ import { Router } from '@angular/router';
   styleUrls: ['./signin.component.scss']
 })
 export class SigninComponent implements OnInit {
-  logForm:FormGroup;
-  
+  logForm: FormGroup;
+
   constructor(private fb: FormBuilder, private router: Router) {
     this.logForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
     })
-   }
+  }
 
   ngOnInit(): void {
   }
@@ -23,11 +23,10 @@ export class SigninComponent implements OnInit {
   logIn() {
 
     let logged;
-    console.log(this.logForm.valid)
+    // console.log(this.logForm.valid)
     if (this.logForm.valid) {
       logged = 'true';
-      sessionStorage.setItem('session', JSON.stringify(logged));
-      this.router.navigate(['home/dashboard']);      
+      // this.router.navigate(['home/dashboard']);//after mapping Auth api success
 
     } else {
       logged = 'false';
@@ -37,6 +36,12 @@ export class SigninComponent implements OnInit {
     }
 
 
+  }
+
+  navigate() {
+    const session = { name: 'Guest' };
+    sessionStorage.setItem('session', JSON.stringify(session));
+    this.router.navigate(['home/dashboard']);
   }
 
 }
